@@ -954,3 +954,31 @@
     animation: none !important;
   }
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   TaskForge — Cinematic Orb Keyframes
+   Ultra-slow rotation + breathing for the hero energy core.
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes tf-orb-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes tf-orb-spin-rev {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+@keyframes tf-orb-breathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\\[tf-orb-spin_60s_linear_infinite\\],
+  .animate-\\[tf-orb-spin-rev_45s_linear_infinite\\] {
+    animation: none !important;
+  }
+}

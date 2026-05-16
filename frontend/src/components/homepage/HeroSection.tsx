@@ -3,17 +3,17 @@ import { ArrowRight, KanbanSquare, Zap, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DEMO_CREDENTIALS } from "@/lib/constants";
 import FloatingCards from "./FloatingCards";
-import HeroOrb from "./HeroOrb";
+import CinematicOrb from "./CinematicOrb";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      {/* Cinematic energy core behind hero content */}
+      <CinematicOrb />
+
       {/* Hero-local accent glows — very subtle */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/[0.03] rounded-full blur-3xl float pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/[0.05] rounded-full blur-3xl float-delayed pointer-events-none" />
-
-      {/* Cinematic floating core behind hero content */}
-      <HeroOrb />
 
       {/* Floating Mac-style mini widgets */}
       <FloatingCards />
