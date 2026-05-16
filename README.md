@@ -9,8 +9,8 @@
 <h1 align="center">⚡ TaskForge</h1>
 
 <p align="center">
-  <strong>A modern, full-stack workforce management platform built for teams that move fast.</strong><br/>
-  Role-based dashboards · Real-time attendance · Task pipelines · Leave management
+  <strong>An AI workflow management platform for teams running evaluation pipelines, RLHF ranking, and generalist operations.</strong><br/>
+  Kanban task boards · Punch-in time tracking · Access-gated workspaces · AI-powered insights
 </p>
 
 <p align="center">
@@ -36,14 +36,12 @@
 
 ## 🎯 What is TaskForge?
 
-TaskForge is a production-ready HR and workforce management system with **two distinct portals**:
+TaskForge is a full-stack project management platform designed for AI/ML teams running evaluation pipelines and generalist workflows. It has **two distinct portals**:
 
-| Portal | Who it's for | What they can do |
-|--------|-------------|-----------------|
-| **Admin (HR)** | Managers & HR staff | Manage employees, track attendance, assign tasks, handle leave requests, view analytics |
-| **Member (Employee)** | Team members | Punch in/out, manage tasks, submit leave requests, view projects, upload documents |
-
-All data is **real and persistent** — stored in a PostgreSQL database on Railway. Every action (creating employees, marking attendance, approving leaves) is saved in real-time.
+| Portal | Who it's for | Core purpose |
+|--------|-------------|--------------|
+| **Admin** | Project managers & leads | Create projects, manage Kanban tasks, review access requests, track team work sessions, view AI insights |
+| **Member** | Contributors & annotators | Request workspace access, punch in/out to track time, work on assigned projects, view activity feed |
 
 ---
 
@@ -51,7 +49,7 @@ All data is **real and persistent** — stored in a PostgreSQL database on Railw
 
 ### Admin Portal
 
-Use the pre-configured demo credentials:
+Use the demo credentials:
 
 ```
 Email:    hr@staffsync.com
@@ -60,76 +58,78 @@ Password: demo123
 
 ### Member Portal
 
-**Create your own account** — click "Sign Up" on the homepage, fill in your details, and you're in.
+**Create your own account** — click "Sign Up" on the homepage, fill in your details, and log in.
 
-> Members who sign up are automatically registered as employees. The admin will see new signups in their dashboard.
-
----
-
-## ✨ Key Features
-
-### 👔 Admin (HR) Portal
-
-| Feature | Description |
-|---------|-------------|
-| **Dashboard Analytics** | Real-time stats — total employees, attendance rate, department distribution, monthly trends |
-| **Employee Management** | Add, edit, deactivate employees. Full CRUD with search, filter, and pagination |
-| **Attendance Tracking** | View all employee attendance records. Manually mark attendance for any employee |
-| **Task Assignment** | Create and assign tasks to employees with priority levels and deadlines |
-| **Leave Management** | Review, approve, or reject leave requests submitted by members |
-| **Notifications** | Send notifications to individual employees or broadcast to all |
-| **Project Pipelines** | Organize work into Eval and Generalist project categories |
-| **AI Insights** | Analytics-driven insights on workforce performance |
-| **Access Requests** | Manage new member access and role assignments |
-
-### 👤 Member (Employee) Portal
-
-| Feature | Description |
-|---------|-------------|
-| **Punch In / Punch Out** | One-click attendance marking. Late detection if check-in is after 9:30 AM |
-| **Attendance History** | View personal attendance records with monthly summaries and rates |
-| **Task Management** | View assigned tasks, create personal tasks, update status (pending → in-progress → completed) |
-| **Leave Requests** | Submit leave requests (sick, vacation, personal, emergency) with date ranges and reasons |
-| **Document Upload** | Upload and manage personal documents (contracts, reports, policies) |
-| **Announcements** | View company-wide announcements from HR |
-| **Notifications** | Receive real-time notifications from admin |
-| **Projects & Work Sessions** | Participate in assigned projects, track work sessions and activity |
+> After signing up, you'll need to **request access** to a workspace (Evals or Generalists). The admin can then approve your request from the Access Requests page.
 
 ---
 
-## 🔄 How It Works — Core Workflows
+## ✨ Features
+
+### 👔 Admin Portal
+
+| Feature | Description |
+|---------|-------------|
+| **Dashboard** | Real-time KPIs — active projects, total tasks, productivity rate, open issues, team members online, eval accuracy. Includes productivity chart and task status breakdown |
+| **Kanban Task Board** | Drag-and-drop board with 5 columns: Backlog → Assigned → In Progress → Review → Done. Create tasks with title, type, priority (low/med/high/critical), assignee, and due date |
+| **Projects** | Two categories — **Evals** (quality reviews, safety audits, RLHF comparisons) and **Generalists** (open-ended ops, research, data validation). Each project has: overview, members, submissions, issues tab, and activity log |
+| **Access Requests** | Members must apply for workspace access. Admin reviews pending requests and approves or rejects them. Badge count shows pending requests in the sidebar |
+| **Work Sessions** | View all team members' punch-in sessions in real-time. See who's active now, total hours logged, session durations (live-updating), and filter by status |
+| **Team Members** | Manage team — view all members, their roles, and status |
+| **AI Insights** | Analytics dashboard with: most delayed project, fastest contributor, backlog growth, avg task completion time, peak productivity hours, team leaderboard, weekly trends, and AI-generated recommendations |
+| **Issues** | Raise and resolve issues on any project. Track open issues across all projects from the dashboard |
+
+### 👤 Member Portal
+
+| Feature | Description |
+|---------|-------------|
+| **Dashboard** | Personal workspace with KPIs (my projects, avg progress, today's tracked time, session count), weekly activity chart, task status donut, workspace access cards, active projects with quick-start buttons |
+| **Punch In / Punch Out** | One-click time tracking. Start a general session or tie it to a specific project. Live timer updates every second. Session history with durations |
+| **Projects** | View Evals and Generalists workspaces. If access is granted, browse projects and start working. If locked, apply for access (shows blurred preview). If pending, shows "awaiting review" |
+| **Work Sessions** | Full session history — today's time, all-time total, session count. Each session shows project name, start/end time, and duration |
+| **Activity Feed** | Notifications about access request updates, task assignments, and project reviews. Mark as read individually or all at once |
+| **Start Task** | From any assigned project, click "Start Task" to begin a tracked work session tied to that project |
+
+---
+
+## 🔄 Core Workflows
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        MEMBER SIGNS UP                           │
+│                     MEMBER ONBOARDING                            │
 ├─────────────────────────────────────────────────────────────────┤
-│  1. Member creates account → auto-registered as employee        │
-│  2. Admin receives notification of new signup                   │
-│  3. Member can immediately punch in, view tasks, submit leaves  │
+│  1. Member signs up → creates account                           │
+│  2. Member goes to Projects → sees locked workspaces            │
+│  3. Member clicks "Apply for Access" on Evals or Generalists    │
+│  4. Admin sees request in Access Requests → Approves            │
+│  5. Member now has access → can view projects & start tasks     │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                     ATTENDANCE FLOW                              │
+│                     PUNCH IN / TIME TRACKING                    │
 ├─────────────────────────────────────────────────────────────────┤
-│  Member: Punch In → Work → Punch Out                            │
-│  Admin:  Views all attendance in dashboard + analytics           │
-│  System: Auto-calculates hours worked, flags late arrivals       │
+│  Member: Clicks "Punch In" → live timer starts                  │
+│  Member: Works on tasks → timer runs in background              │
+│  Member: Clicks "Punch Out" → session logged with duration      │
+│  Admin:  Sees all active sessions in real-time on Work Sessions │
+│  Admin:  Dashboard shows "X members online now"                 │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                     LEAVE REQUEST FLOW                           │
+│                     TASK MANAGEMENT (ADMIN)                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  Member: Submits leave request (type, dates, reason)            │
-│  Admin:  Reviews pending requests → Approves / Rejects          │
-│  System: Updates attendance records, notifies member             │
+│  Admin: Opens Kanban board → creates task with priority          │
+│  Admin: Assigns task to team member → places in column          │
+│  Admin: Drags tasks between columns as work progresses          │
+│  Columns: Backlog → Assigned → In Progress → Review → Done     │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                       TASK FLOW                                  │
+│                     ISSUES WORKFLOW                              │
 ├─────────────────────────────────────────────────────────────────┤
-│  Admin:  Creates task → assigns to employee with deadline       │
-│  Member: Views task → updates status → marks complete           │
-│  Both:   Can raise issues and track progress                    │
+│  Admin or Member: Raises an issue on a project                  │
+│  Admin: Views open issues across all projects on dashboard      │
+│  Admin: Resolves issues from the project detail → Issues tab    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -142,13 +142,17 @@ TaskForge/
 ├── frontend/                 # React + TypeScript SPA
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── hr/          # Admin portal pages
-│   │   │   ├── member/      # Member portal pages
-│   │   │   └── employee/    # Employee sub-pages
-│   │   ├── components/      # Reusable UI components (shadcn/ui)
-│   │   ├── contexts/        # React context providers
+│   │   │   ├── hr/          # Admin portal (Dashboard, Projects, Tasks, etc.)
+│   │   │   ├── member/      # Member portal (Dashboard, Projects, Work Sessions, Activity)
+│   │   │   └── employee/    # Legacy employee pages
+│   │   ├── components/
+│   │   │   ├── hr/          # Admin components (Kanban, charts, project tabs)
+│   │   │   ├── member/      # Member components (layout, session cards)
+│   │   │   ├── homepage/    # Landing page sections
+│   │   │   └── ui/          # shadcn/ui component library
+│   │   ├── contexts/        # ProjectsContext, WorkspaceContext, UserContext
 │   │   ├── hooks/           # Custom React hooks
-│   │   └── lib/             # API client, utilities
+│   │   └── lib/             # API client, utilities, constants
 │   └── package.json
 │
 ├── backend/                  # FastAPI Python server
@@ -158,7 +162,7 @@ TaskForge/
 │   │   ├── schemas/         # Pydantic validation schemas
 │   │   ├── core/            # Auth, security, dependencies
 │   │   ├── config.py        # Environment configuration
-│   │   ├── database.py      # DB connection & session
+│   │   ├── database.py      # DB connection & session management
 │   │   └── main.py          # FastAPI app entry point
 │   └── requirements.txt
 │
@@ -177,10 +181,11 @@ TaskForge/
 | **Vite** | Build tool & dev server |
 | **Tailwind CSS** | Utility-first styling |
 | **shadcn/ui + Radix** | Accessible component library |
+| **@dnd-kit** | Drag-and-drop for Kanban board |
+| **Recharts** | Charts (area, pie, donut) |
 | **React Router v6** | Client-side routing |
 | **TanStack Query** | Server state management |
 | **Axios** | HTTP client |
-| **Recharts** | Data visualization |
 | **React Hook Form + Zod** | Form handling & validation |
 
 ### Backend
@@ -202,18 +207,18 @@ TaskForge/
 
 ---
 
-## 📊 Data Points
+## 📊 Key Data Points
 
 | Metric | Value |
 |--------|-------|
 | API Endpoints | 25+ RESTful routes |
-| Database Models | 8 (User, Employee, Attendance, Task, Document, Announcement, LeaveRequest, Notification) |
+| Kanban Columns | 5 (Backlog, Assigned, In Progress, Review, Done) |
+| Task Priorities | 4 (Low, Medium, High, Critical) |
+| Project Categories | 2 (Evals, Generalists) |
 | Auth System | JWT with access + refresh tokens |
-| Role Types | 2 (HR Administrator, Employee) |
-| Leave Types | 4 (Sick, Vacation, Personal, Emergency) |
-| Task Priorities | 3 (Low, Medium, High) |
-| Task Statuses | 4 (Pending, In-Progress, Completed, Cancelled) |
-| Attendance Statuses | 4 (Present, Absent, Late, On Leave) |
+| Role Types | 2 (Admin, Member) |
+| Access States | 3 (Granted, Pending, Locked) |
+| Session Tracking | Real-time with per-second updates |
 
 ---
 
@@ -223,14 +228,14 @@ TaskForge/
 
 - Python 3.10+
 - Node.js 18+
-- PostgreSQL (or use SQLite for local dev)
+- PostgreSQL (or uses SQLite for local dev)
 
 ### Backend
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate        # On Windows: venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 python run.py
 ```
@@ -253,34 +258,16 @@ App starts at `http://localhost:5173`
 
 - **Password Hashing** — bcrypt with salt rounds
 - **JWT Authentication** — Short-lived access tokens (30 min) + refresh tokens (7 days)
-- **Role-Based Access Control** — HR and Employee roles with route-level protection
+- **Role-Based Access Control** — Admin and Member roles with route-level protection
+- **Workspace Gating** — Members must be approved before accessing project workspaces
 - **CORS** — Configured for specific allowed origins
 - **Input Validation** — Pydantic schemas validate all incoming data
-- **SQL Injection Protection** — SQLAlchemy ORM with parameterized queries
-
----
-
-## 📡 API Overview
-
-| Category | Endpoints | Description |
-|----------|-----------|-------------|
-| **Auth** | `POST /api/auth/login` · `POST /api/auth/signup` · `POST /api/auth/refresh` · `GET /api/auth/me` | Authentication & user management |
-| **HR Dashboard** | `GET /api/hr/dashboard/stats` · `GET /api/hr/analytics` | Real-time statistics & analytics |
-| **Employees** | `GET/POST/PUT/DELETE /api/hr/employees` | Full employee CRUD |
-| **Attendance** | `GET /api/hr/attendance` · `POST /api/hr/attendance/mark` | View & mark attendance |
-| **Leave Requests** | `GET /api/hr/leave-requests` · `PUT /api/hr/leave-requests/{id}/status` | Manage leave approvals |
-| **Employee Self-Service** | `POST /api/employee/attendance/checkin` · `POST /api/employee/attendance/checkout` | Punch in/out |
-| **Tasks** | `GET/POST/PUT /api/employee/tasks` | Task management |
-| **Documents** | `GET/POST /api/employee/documents` | Document uploads |
-| **Notifications** | `POST /api/hr/notifications` · `GET /api/employee/notifications` | Send & receive notifications |
-
-Full interactive documentation: [**Swagger UI →**](https://taskforge-production-5bfc.up.railway.app/docs)
 
 ---
 
 ## 🌐 Deployment
 
-Both services are deployed on **Railway** with automatic deploys from the repository:
+Both services are deployed on **Railway** with automatic deploys:
 
 | Service | URL | Status |
 |---------|-----|--------|
@@ -298,5 +285,5 @@ This project is open source and available for educational and portfolio purposes
 
 <p align="center">
   Built with ☕ and modern web technologies<br/>
-  <strong>TaskForge</strong> — Workforce management, simplified.
+  <strong>TaskForge</strong> — AI workflow management, simplified.
 </p>
