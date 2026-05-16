@@ -1,252 +1,315 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  FolderKanban,
-  Clock,
-  Users2,
+  DndContext,
+  DragOverlay,
+  closestCorners,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragStartEvent,
+  DragEndEvent,
+  DragOverEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  arrayMove,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import {
   Plus,
-  CheckCircle2,
-  AlertTriangle,
-  ArrowUpRight,
+  CheckSquare,
+  Sparkles,
+  Calendar,
+  Users2,
+  AlertCircle,
 } from "lucide-react";
 import { MainLayout } from "@/components/hr/layout/MainLayout";
 import { Button } from "@/components/ui/button";
+import { useProjects } from "@/contexts/ProjectsContext";
+import { Project, ProjectCategory } from "@/types/project";
 import { cn } from "@/lib/utils";
+import { CreateProjectDialog } from "@/components/hr/projects/CreateProjectDialog";
+import { ProjectCard } from "@/components/hr/projects/ProjectCard";
 
-interface Project {
-  id: string;
-  name: string;
+const COLUMNS: {
+  id: ProjectCategory;
+  label: string;
+  icon: typeof CheckSquare;
   description: string;
-  progress: number;
-  members: number;
-  deadline: string;
-  totalTasks: number;
-  completedTasks: number;
-  status: "active" | "completed" | "at_risk";
-  priority: "low" | "medium" | "high";
-}
-
-const projects: Project[] = [
+}[] = [
   {
-    id: "p1",
-    name: "Text-to-Image Evaluation",
-    description: "Evaluate generated images against prompts for quality, accuracy, and safety compliance.",
-    progress: 78,
-    members: 6,
-    deadline: "May 28, 2026",
-    totalTasks: 42,
-    completedTasks: 33,
-    status: "active",
-    priority: "high",
+    id: "eval",
+    label: "Evals",
+    icon: CheckSquare,
+    description: "Evaluation pipelines and quality reviews",
   },
   {
-    id: "p2",
-    name: "RLHF Ranking Pipeline",
-    description: "Human preference ranking for reinforcement learning from human feedback training data.",
-    progress: 54,
-    members: 8,
-    deadline: "Jun 5, 2026",
-    totalTasks: 68,
-    completedTasks: 37,
-    status: "active",
-    priority: "high",
-  },
-  {
-    id: "p3",
-    name: "Prompt Safety Audit",
-    description: "Systematic audit of prompt-response pairs for safety, bias, and harmful content detection.",
-    progress: 92,
-    members: 4,
-    deadline: "May 22, 2026",
-    totalTasks: 24,
-    completedTasks: 22,
-    status: "active",
-    priority: "medium",
-  },
-  {
-    id: "p4",
-    name: "Response Quality Analysis",
-    description: "Multi-dimensional quality scoring of AI responses across helpfulness, accuracy, and tone.",
-    progress: 35,
-    members: 5,
-    deadline: "Jun 15, 2026",
-    totalTasks: 56,
-    completedTasks: 20,
-    status: "at_risk",
-    priority: "high",
-  },
-  {
-    id: "p5",
-    name: "Generalist QA Benchmark",
-    description: "Comprehensive benchmark suite for evaluating general knowledge and reasoning capabilities.",
-    progress: 100,
-    members: 7,
-    deadline: "May 15, 2026",
-    totalTasks: 38,
-    completedTasks: 38,
-    status: "completed",
-    priority: "medium",
-  },
-  {
-    id: "p6",
-    name: "Synthetic Data Validation",
-    description: "Quality assurance pipeline for synthetically generated training data across multiple domains.",
-    progress: 62,
-    members: 4,
-    deadline: "Jun 10, 2026",
-    totalTasks: 45,
-    completedTasks: 28,
-    status: "active",
-    priority: "medium",
-  },
-  {
-    id: "p7",
-    name: "Vision Benchmarking Suite",
-    description: "End-to-end evaluation framework for multimodal vision-language model outputs.",
-    progress: 18,
-    members: 6,
-    deadline: "Jul 1, 2026",
-    totalTasks: 52,
-    completedTasks: 9,
-    status: "active",
-    priority: "low",
-  },
-  {
-    id: "p8",
-    name: "Multilingual Eval Framework",
-    description: "Cross-language evaluation pipeline supporting 12 languages with cultural context awareness.",
-    progress: 45,
-    members: 9,
-    deadline: "Jun 20, 2026",
-    totalTasks: 72,
-    completedTasks: 32,
-    status: "active",
-    priority: "high",
+    id: "generalist",
+    label: "Generalists",
+    icon: Sparkles,
+    description: "Open-ended ops & research workflows",
   },
 ];
 
-const statusConfig = {
-  active: { label: "Active", className: "bg-primary/15 text-primary" },
-  completed: { label: "Completed", className: "bg-[hsl(168_76%_42%/0.15)] text-primary" },
-  at_risk: { label: "At Risk", className: "bg-warning/15 text-warning" },
-};
+const SortableProjectCard = ({
+  project,
+  onClick,
+}: {
+  project: Project;
+  onClick: () => void;
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: project.id });
 
-type FilterTab = "all" | "active" | "completed" | "high_priority";
-
-const Projects = () => {
-  const [activeFilter, setActiveFilter] = useState<FilterTab>("all");
-
-  const filteredProjects = projects.filter((p) => {
-    if (activeFilter === "all") return true;
-    if (activeFilter === "active") return p.status === "active";
-    if (activeFilter === "completed") return p.status === "completed";
-    if (activeFilter === "high_priority") return p.priority === "high";
-    return true;
-  });
-
-  const filters: { id: FilterTab; label: string; count: number }[] = [
-    { id: "all", label: "All", count: projects.length },
-    { id: "active", label: "Active", count: projects.filter((p) => p.status === "active").length },
-    { id: "completed", label: "Completed", count: projects.filter((p) => p.status === "completed").length },
-    { id: "high_priority", label: "High Priority", count: projects.filter((p) => p.priority === "high").length },
-  ];
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.4 : 1,
+  };
 
   return (
-    <MainLayout title="Projects" description="Manage and track all team projects.">
+    <div ref={setNodeRef} style={style}>
+      <ProjectCard
+        project={project}
+        onClick={onClick}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      />
+    </div>
+  );
+};
+
+const KanbanColumn = ({
+  category,
+  label,
+  icon: Icon,
+  description,
+  projects,
+  onCardClick,
+  onCreate,
+}: {
+  category: ProjectCategory;
+  label: string;
+  icon: typeof CheckSquare;
+  description: string;
+  projects: Project[];
+  onCardClick: (id: string) => void;
+  onCreate: (cat: ProjectCategory) => void;
+}) => {
+  return (
+    <div className="flex flex-col flex-1 min-w-[320px]">
+      {/* Column header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "w-9 h-9 rounded-lg flex items-center justify-center",
+              category === "eval"
+                ? "bg-primary/15 text-primary"
+                : "bg-[hsl(260_70%_65%/0.15)] text-[hsl(260_70%_65%)]"
+            )}
+          >
+            <Icon className="w-4 h-4" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+              {label}
+              <span className="text-xs text-muted-foreground font-normal bg-[hsl(220_30%_10%/0.6)] px-1.5 py-0.5 rounded">
+                {projects.length}
+              </span>
+            </h3>
+            <p className="text-[11px] text-muted-foreground">{description}</p>
+          </div>
+        </div>
+        <button
+          onClick={() => onCreate(category)}
+          className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-primary/10"
+        >
+          <Plus className="w-3.5 h-3.5" />
+          New
+        </button>
+      </div>
+
+      {/* Cards */}
+      <div className="flex-1 space-y-3 min-h-[200px] p-1 -m-1 rounded-xl">
+        <SortableContext
+          items={projects.map((p) => p.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {projects.map((project) => (
+            <SortableProjectCard
+              key={project.id}
+              project={project}
+              onClick={() => onCardClick(project.id)}
+            />
+          ))}
+        </SortableContext>
+
+        {projects.length === 0 && (
+          <div className="rounded-xl border border-dashed border-[hsl(168_50%_40%/0.15)] p-8 text-center">
+            <p className="text-xs text-muted-foreground">
+              No projects yet. Click <span className="text-primary">New</span>{" "}
+              to add one.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Projects = () => {
+  const navigate = useNavigate();
+  const { projects, moveProjectCategory, reorderProjects } = useProjects();
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createCategory, setCreateCategory] = useState<ProjectCategory>("eval");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
+  );
+
+  const evalProjects = projects.filter((p) => p.category === "eval");
+  const generalistProjects = projects.filter((p) => p.category === "generalist");
+
+  const findCategory = (id: string): ProjectCategory | null =>
+    projects.find((p) => p.id === id)?.category ?? null;
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const project = projects.find((p) => p.id === event.active.id);
+    if (project) setActiveProject(project);
+  };
+
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeCat = findCategory(active.id as string);
+    const overCat =
+      findCategory(over.id as string) ?? (over.id as ProjectCategory);
+
+    if (!activeCat || !overCat || activeCat === overCat) return;
+    moveProjectCategory(active.id as string, overCat);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveProject(null);
+    if (!over) return;
+
+    const activeCat = findCategory(active.id as string);
+    const overCat = findCategory(over.id as string);
+    if (!activeCat || !overCat || activeCat !== overCat) return;
+
+    const list =
+      activeCat === "eval" ? evalProjects : generalistProjects;
+    const oldIndex = list.findIndex((p) => p.id === active.id);
+    const newIndex = list.findIndex((p) => p.id === over.id);
+    if (oldIndex !== newIndex && oldIndex >= 0 && newIndex >= 0) {
+      reorderProjects(activeCat, arrayMove(list, oldIndex, newIndex));
+    }
+  };
+
+  const handleCreate = (cat: ProjectCategory) => {
+    setCreateCategory(cat);
+    setCreateOpen(true);
+  };
+
+  return (
+    <MainLayout
+      title="Projects"
+      description="Drag-and-drop AI workflow management."
+    >
       {/* Toolbar */}
       <div className="flex items-center justify-between mb-6">
-        {/* Filter tabs */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-[hsl(220_30%_10%/0.5)] border border-[hsl(168_50%_40%/0.08)]">
-          {filters.map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setActiveFilter(f.id)}
-              className={cn(
-                "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                activeFilter === f.id
-                  ? "bg-primary/15 text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+        <div className="flex items-center gap-3">
+          <div className="text-xs text-muted-foreground">
+            <span className="text-foreground font-semibold">
+              {projects.length}
+            </span>{" "}
+            total projects
+          </div>
+          <span className="h-3 w-px bg-border/50" />
+          <div className="text-xs text-muted-foreground">
+            <span className="text-foreground font-semibold">
+              {projects.reduce((acc, p) => acc + p.members.length, 0)}
+            </span>{" "}
+            assignments
+          </div>
+          <span className="h-3 w-px bg-border/50" />
+          <div className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <AlertCircle className="w-3 h-3" />
+            <span className="text-foreground font-semibold">
+              {projects.reduce(
+                (acc, p) => acc + p.issues.filter((i) => i.status !== "resolved").length,
+                0
               )}
-            >
-              {f.label}
-              <span className="ml-1.5 text-[10px] opacity-70">{f.count}</span>
-            </button>
-          ))}
+            </span>{" "}
+            open issues
+          </div>
         </div>
 
-        <Button variant="hero" size="sm" className="rounded-xl">
+        <Button
+          variant="hero"
+          size="sm"
+          onClick={() => handleCreate("eval")}
+          className="rounded-xl"
+        >
           <Plus className="w-4 h-4" />
           New Project
         </Button>
       </div>
 
-      {/* Projects Grid */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {filteredProjects.map((project) => {
-          const status = statusConfig[project.status];
-          return (
-            <div
-              key={project.id}
-              className="dash-glass rounded-2xl p-5 group hover:border-primary/20 transition-all duration-300"
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <FolderKanban className="w-4 h-4 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-foreground leading-tight">
-                      {project.name}
-                    </h3>
-                  </div>
-                </div>
-                <span className={cn("text-[10px] font-semibold px-2 py-0.5 rounded-full", status.className)}>
-                  {status.label}
-                </span>
-              </div>
+      {/* Kanban */}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="flex gap-6 overflow-x-auto pb-4 -mx-2 px-2">
+          <KanbanColumn
+            category="eval"
+            label="Evals"
+            icon={CheckSquare}
+            description="Evaluation pipelines and quality reviews"
+            projects={evalProjects}
+            onCardClick={(id) => navigate(`/hr/projects/${id}`)}
+            onCreate={handleCreate}
+          />
+          <KanbanColumn
+            category="generalist"
+            label="Generalists"
+            icon={Sparkles}
+            description="Open-ended ops & research workflows"
+            projects={generalistProjects}
+            onCardClick={(id) => navigate(`/hr/projects/${id}`)}
+            onCreate={handleCreate}
+          />
+        </div>
 
-              {/* Description */}
-              <p className="text-xs text-muted-foreground leading-relaxed mb-4 line-clamp-2">
-                {project.description}
-              </p>
+        <DragOverlay>
+          {activeProject ? (
+            <ProjectCard project={activeProject} dragging />
+          ) : null}
+        </DragOverlay>
+      </DndContext>
 
-              {/* Progress */}
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs text-muted-foreground">Progress</span>
-                  <span className="text-xs font-medium text-foreground">{project.progress}%</span>
-                </div>
-                <div className="h-1.5 rounded-full bg-border/50 overflow-hidden">
-                  <div
-                    className={cn(
-                      "h-full rounded-full transition-all duration-700",
-                      project.status === "at_risk"
-                        ? "bg-gradient-to-r from-warning to-warning/70"
-                        : "bg-gradient-to-r from-primary to-[hsl(188_90%_55%)]"
-                    )}
-                    style={{ width: `${project.progress}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Meta */}
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1">
-                    <Users2 className="w-3 h-3" /> {project.members}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3" /> {project.completedTasks}/{project.totalTasks}
-                  </span>
-                </div>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" /> {project.deadline.split(",")[0]}
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {/* Create dialog */}
+      <CreateProjectDialog
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+        defaultCategory={createCategory}
+      />
     </MainLayout>
   );
 };

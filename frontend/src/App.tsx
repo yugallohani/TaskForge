@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ErrorBoundary, PageLoader } from "@/components/common";
 import { UserProvider } from "@/contexts/UserContext";
+import { ProjectsProvider } from "@/contexts/ProjectsContext";
 import { HRLayout } from "@/components/hr/layout/HRLayout";
 
 // Lazy load pages for better performance
@@ -17,6 +18,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 // HR Dashboard Pages
 const HRDashboard = lazy(() => import("./pages/hr/Dashboard"));
 const HRProjects = lazy(() => import("./pages/hr/Projects"));
+const HRProjectDetail = lazy(() => import("./pages/hr/ProjectDetail"));
 const HRTasks = lazy(() => import("./pages/hr/Tasks"));
 const HREmployees = lazy(() => import("./pages/hr/Employees"));
 const HRAttendance = lazy(() => import("./pages/hr/Attendance"));
@@ -43,7 +45,8 @@ const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <TooltipProvider>
+        <ProjectsProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -58,6 +61,7 @@ const App = () => (
                 <Route path="/hr" element={<HRLayout />}>
                   <Route path="dashboard" element={<HRDashboard />} />
                   <Route path="projects" element={<HRProjects />} />
+                  <Route path="projects/:projectId" element={<HRProjectDetail />} />
                   <Route path="tasks" element={<HRTasks />} />
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="attendance" element={<HRAttendance />} />
@@ -77,6 +81,7 @@ const App = () => (
             </Suspense>
           </BrowserRouter>
         </TooltipProvider>
+        </ProjectsProvider>
       </UserProvider>
     </QueryClientProvider>
   </ErrorBoundary>
