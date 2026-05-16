@@ -141,14 +141,11 @@ export const seedProjects: Project[] = [
     status: "active",
     progress: 72,
     members: [
-      m("u1", 18, 25, "submitted"),
-      m("u2", 22, 25, "submitted"),
-      m("u3", 12, 25, "in_progress"),
-      m("u4", 20, 25, "submitted"),
-      m("u5", 8, 25, "in_progress"),
-      m("u6", 25, 25, "submitted"),
-      m("u7", 15, 25, "in_progress"),
-      m("u8", 24, 25, "submitted"),
+      m("u1", 4, 5, "submitted"),
+      m("u2", 5, 5, "submitted"),
+      m("u3", 2, 5, "in_progress"),
+      m("u4", 4, 5, "submitted"),
+      m("u5", 1, 4, "in_progress"),
     ],
     submissions: [
       {
@@ -158,7 +155,7 @@ export const seedProjects: Project[] = [
         memberAvatar: "PP",
         submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
         status: "approved",
-        itemsCount: 25,
+        itemsCount: 5,
         notes: "Clean submission, all rationales present.",
       },
       {
@@ -168,7 +165,7 @@ export const seedProjects: Project[] = [
         memberAvatar: "RS",
         submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
         status: "approved",
-        itemsCount: 25,
+        itemsCount: 5,
       },
       {
         id: "sub_3",
@@ -177,25 +174,16 @@ export const seedProjects: Project[] = [
         memberAvatar: "SG",
         submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
         status: "pending",
-        itemsCount: 25,
+        itemsCount: 5,
       },
       {
         id: "sub_4",
-        memberId: "u6",
-        memberName: "Anjali Reddy",
-        memberAvatar: "AR",
+        memberId: "u5",
+        memberName: "Vikram Singh",
+        memberAvatar: "VS",
         submittedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
         status: "pending",
-        itemsCount: 25,
-      },
-      {
-        id: "sub_5",
-        memberId: "u8",
-        memberName: "Divya Joshi",
-        memberAvatar: "DJ",
-        submittedAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-        status: "approved",
-        itemsCount: 24,
+        itemsCount: 4,
       },
     ],
     issues: [
@@ -238,9 +226,9 @@ export const seedProjects: Project[] = [
       {
         id: "act_1",
         type: "submission_uploaded",
-        actor: "Anjali Reddy",
-        actorAvatar: "AR",
-        description: "uploaded a submission (25 items)",
+        actor: "Priya Patel",
+        actorAvatar: "PP",
+        description: "uploaded a submission (5 items)",
         timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
       },
       {
@@ -262,14 +250,14 @@ export const seedProjects: Project[] = [
       {
         id: "act_4",
         type: "member_joined",
-        actor: "Divya Joshi",
-        actorAvatar: "DJ",
+        actor: "Vikram Singh",
+        actorAvatar: "VS",
         description: "joined the project",
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 28).toISOString(),
       },
     ],
     createdAt: isoOffset(-14),
-    expectedSubmissions: 8,
+    expectedSubmissions: 5,
   },
 
   // ─── GENERALISTS ───
@@ -286,10 +274,10 @@ export const seedProjects: Project[] = [
     status: "active",
     progress: 48,
     members: [
-      m("u3", 10, 20, "in_progress"),
-      m("u5", 12, 20, "submitted"),
-      m("u7", 8, 20, "in_progress"),
-      m("u4", 15, 20, "submitted"),
+      m("u3", 3, 5, "in_progress"),
+      m("u5", 4, 5, "submitted"),
+      m("u7", 2, 4, "in_progress"),
+      m("u4", 4, 5, "submitted"),
     ],
     submissions: [
       {
@@ -299,7 +287,7 @@ export const seedProjects: Project[] = [
         memberAvatar: "VS",
         submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
         status: "approved",
-        itemsCount: 20,
+        itemsCount: 5,
       },
       {
         id: "sub_mm_2",
@@ -308,7 +296,7 @@ export const seedProjects: Project[] = [
         memberAvatar: "SG",
         submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
         status: "pending",
-        itemsCount: 20,
+        itemsCount: 5,
       },
     ],
     issues: [

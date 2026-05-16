@@ -22,8 +22,10 @@ import {
   Clock,
   User2,
   GripVertical,
+  Plus,
 } from "lucide-react";
 import { MainLayout } from "@/components/hr/layout/MainLayout";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 // ─── Types ───
@@ -173,6 +175,7 @@ const KanbanColumn = ({ column, tasks }: { column: Column; tasks: Task[] }) => {
 const Tasks = () => {
   const [tasksByColumn, setTasksByColumn] = useState(initialTasks);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
@@ -238,6 +241,25 @@ const Tasks = () => {
 
   return (
     <MainLayout title="Tasks" description="Drag and drop to manage your task pipeline.">
+      {/* Toolbar */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="text-xs text-muted-foreground">
+          <span className="text-foreground font-semibold">
+            {Object.values(tasksByColumn).reduce((a, c) => a + c.length, 0)}
+          </span>{" "}
+          total tasks across {columns.length} columns
+        </div>
+        <Button
+          variant="hero"
+          size="sm"
+          onClick={() => setCreateOpen(true)}
+          className="rounded-xl"
+        >
+          <Plus className="w-4 h-4" />
+          Add Task
+        </Button>
+      </div>
+
       {/* Kanban Board */}
       <DndContext
         sensors={sensors}
@@ -260,8 +282,198 @@ const Tasks = () => {
           {activeTask ? <TaskCard task={activeTask} isDragging /> : null}
         </DragOverlay>
       </DndContext>
+
+      {/* Create Task Dialog */}
+      {createOpen && (
+        <CreateTaskDialog
+          open={createOpen}
+          onOpenChange={setCreateOpen}
+          onCreateTask={(task, column) => {
+            setTasksByColumn((prev) => ({
+              ...prev,
+              [column]: [...prev[column], task],
+            }));
+          }}
+        />
+      )}
     </MainLayout>
   );
 };
 
 export default Tasks;
+
+// ─── Create Task Dialog ───
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+
+const MEMBERS = [
+  { name: "Priya P.", avatar: "PP" },
+  { name: "Rahul S.", avatar: "RS" },
+  { name: "Amit K.", avatar: "AK" },
+  { name: "Sneha G.", avatar: "SG" },
+  { name: "Vikram S.", avatar: "VS" },
+];
+
+const CreateTaskDialog = ({
+  open,
+  onOpenChange,
+  onCreateTask,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  onCreateTask: (task: Task, column: ColumnId) => void;
+}) => {
+  const { toast } = useToast();
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("Evaluation");
+  const [priority, setPriority] = useState<Task["priority"]>("medium");
+  const [assignee, setAssignee] = useState(MEMBERS[0]);
+  const [dueDate, setDueDate] = useState("");
+  const [column, setColumn] = useState<ColumnId>("backlog");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) {
+      toast({ title: "Title required", variant: "destructive" });
+      return;
+    }
+    const task: Task = {
+      id: `t_${Math.random().toString(36).slice(2, 8)}`,
+      title: title.trim(),
+      type,
+      priority,
+      assignee: assignee.name,
+      avatar: assignee.avatar,
+      dueDate: dueDate
+        ? new Date(dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+        : "TBD",
+    };
+    onCreateTask(task, column);
+    toast({ title: "Task created", description: `"${task.title}" added to ${column.replace("_", " ")}` });
+    onOpenChange(false);
+    setTitle("");
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="dash-glass max-w-md border-[hsl(168_50%_40%/0.15)]">
+        <DialogHeader>
+          <DialogTitle>Create Task</DialogTitle>
+          <DialogDescription>Add a new task to the Kanban board.</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">Title</Label>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Image Eval #245"
+              className="bg-[hsl(220_30%_10%/0.5)] border-[hsl(168_50%_40%/0.12)] focus:border-primary"
+              autoFocus
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Type</Label>
+              <Input
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                placeholder="Evaluation"
+                className="bg-[hsl(220_30%_10%/0.5)] border-[hsl(168_50%_40%/0.12)] focus:border-primary"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-xs text-muted-foreground">Due Date</Label>
+              <Input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="bg-[hsl(220_30%_10%/0.5)] border-[hsl(168_50%_40%/0.12)] focus:border-primary"
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">Priority</Label>
+            <div className="flex gap-1.5">
+              {(["low", "medium", "high", "critical"] as Task["priority"][]).map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPriority(p)}
+                  className={cn(
+                    "flex-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all border capitalize",
+                    priority === p
+                      ? "border-primary/40 bg-primary/15 text-primary"
+                      : "border-[hsl(168_50%_40%/0.08)] text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">Assign to</Label>
+            <div className="flex gap-1.5 flex-wrap">
+              {MEMBERS.map((m) => (
+                <button
+                  key={m.avatar}
+                  type="button"
+                  onClick={() => setAssignee(m)}
+                  className={cn(
+                    "px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all border flex items-center gap-1.5",
+                    assignee.avatar === m.avatar
+                      ? "border-primary/40 bg-primary/15 text-primary"
+                      : "border-[hsl(168_50%_40%/0.08)] text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <span className="w-5 h-5 rounded-full bg-primary/15 flex items-center justify-center text-[9px] font-bold text-primary">
+                    {m.avatar}
+                  </span>
+                  {m.name}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label className="text-xs text-muted-foreground">Initial Column</Label>
+            <div className="flex gap-1.5 flex-wrap">
+              {(["backlog", "assigned", "in_progress", "review", "done"] as ColumnId[]).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setColumn(c)}
+                  className={cn(
+                    "px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all border capitalize",
+                    column === c
+                      ? "border-primary/40 bg-primary/15 text-primary"
+                      : "border-[hsl(168_50%_40%/0.08)] text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {c.replace("_", " ")}
+                </button>
+              ))}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="hero">
+              Create Task
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
