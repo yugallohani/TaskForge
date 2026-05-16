@@ -110,7 +110,7 @@ const Employees = () => {
 
   return (
     <MainLayout
-      title="Employees"
+      title="Team Members"
       description="Manage your team members and their information."
     >
       {/* Toolbar */}

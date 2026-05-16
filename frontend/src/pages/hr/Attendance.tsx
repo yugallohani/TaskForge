@@ -148,8 +148,8 @@ const Attendance = () => {
 
   return (
     <MainLayout
-      title="Attendance"
-      description="Track and manage daily employee attendance."
+      title="Work Sessions"
+      description="Track and manage team work sessions and productivity."
     >
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">

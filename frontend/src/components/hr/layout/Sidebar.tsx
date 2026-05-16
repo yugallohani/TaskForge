@@ -31,8 +31,8 @@ import { useToast } from "@/hooks/use-toast";
 
 const mainNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: ROUTES.HR.DASHBOARD },
-  { icon: FolderKanban, label: "Projects", path: ROUTES.HR.EMPLOYEES, comingSoon: true },
-  { icon: CheckSquare, label: "Tasks", path: ROUTES.HR.ATTENDANCE, comingSoon: true },
+  { icon: FolderKanban, label: "Projects", path: ROUTES.HR.PROJECTS },
+  { icon: CheckSquare, label: "Tasks", path: ROUTES.HR.TASKS },
   { icon: Users2, label: "Team Members", path: ROUTES.HR.EMPLOYEES },
   { icon: Timer, label: "Work Sessions", path: ROUTES.HR.ATTENDANCE },
   { icon: BarChart3, label: "Analytics", path: ROUTES.HR.DASHBOARD, comingSoon: true },
@@ -46,8 +46,9 @@ export const Sidebar = () => {
   const isCollapsed = state === "collapsed";
 
   const isActive = (path: string, label: string) => {
-    // More specific matching for items that share paths
     if (label === "Dashboard") return location.pathname === ROUTES.HR.DASHBOARD;
+    if (label === "Projects") return location.pathname === ROUTES.HR.PROJECTS;
+    if (label === "Tasks") return location.pathname === ROUTES.HR.TASKS;
     if (label === "Team Members") return location.pathname === ROUTES.HR.EMPLOYEES;
     if (label === "Work Sessions") return location.pathname === ROUTES.HR.ATTENDANCE;
     return location.pathname === path;
