@@ -99,16 +99,17 @@ export const CreateProjectDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="dash-glass max-w-2xl border-[hsl(168_50%_40%/0.15)]">
-        <DialogHeader>
-          <DialogTitle>Create new project</DialogTitle>
-          <DialogDescription>
-            Add a project to one of the operational pipelines. Assigned members
-            will see it in their workspace.
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="dash-glass max-w-2xl border-[hsl(168_50%_40%/0.15)] max-h-[90vh] overflow-y-auto p-0">
+        <div className="p-6">
+          <DialogHeader>
+            <DialogTitle>Create new project</DialogTitle>
+            <DialogDescription>
+              Add a project to one of the operational pipelines. Assigned members
+              will see it in their workspace.
+            </DialogDescription>
+          </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5 mt-5">
           {/* Category */}
           <div>
             <Label className="text-xs text-muted-foreground mb-2 block">
@@ -306,7 +307,8 @@ export const CreateProjectDialog = ({
               Create Project
             </Button>
           </DialogFooter>
-        </form>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
