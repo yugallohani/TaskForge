@@ -1,222 +1,63 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  DndContext,
-  DragOverlay,
-  closestCorners,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragStartEvent,
-  DragEndEvent,
-  DragOverEvent,
-} from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  useSortable,
-  arrayMove,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import {
-  Plus,
   CheckSquare,
   Sparkles,
-  Calendar,
   Users2,
+  FolderKanban,
   AlertCircle,
+  ArrowRight,
+  Plus,
 } from "lucide-react";
 import { MainLayout } from "@/components/hr/layout/MainLayout";
 import { Button } from "@/components/ui/button";
 import { useProjects } from "@/contexts/ProjectsContext";
-import { Project, ProjectCategory } from "@/types/project";
+import { ProjectCategory } from "@/types/project";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 import { CreateProjectDialog } from "@/components/hr/projects/CreateProjectDialog";
-import { ProjectCard } from "@/components/hr/projects/ProjectCard";
-
-const COLUMNS: {
-  id: ProjectCategory;
-  label: string;
-  icon: typeof CheckSquare;
-  description: string;
-}[] = [
-  {
-    id: "eval",
-    label: "Evals",
-    icon: CheckSquare,
-    description: "Evaluation pipelines and quality reviews",
-  },
-  {
-    id: "generalist",
-    label: "Generalists",
-    icon: Sparkles,
-    description: "Open-ended ops & research workflows",
-  },
-];
-
-const SortableProjectCard = ({
-  project,
-  onClick,
-}: {
-  project: Project;
-  onClick: () => void;
-}) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: project.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.4 : 1,
-  };
-
-  return (
-    <div ref={setNodeRef} style={style}>
-      <ProjectCard
-        project={project}
-        onClick={onClick}
-        dragHandleProps={{ ...attributes, ...listeners }}
-      />
-    </div>
-  );
-};
-
-const KanbanColumn = ({
-  category,
-  label,
-  icon: Icon,
-  description,
-  projects,
-  onCardClick,
-  onCreate,
-}: {
-  category: ProjectCategory;
-  label: string;
-  icon: typeof CheckSquare;
-  description: string;
-  projects: Project[];
-  onCardClick: (id: string) => void;
-  onCreate: (cat: ProjectCategory) => void;
-}) => {
-  return (
-    <div className="flex flex-col flex-1 min-w-[320px]">
-      {/* Column header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={cn(
-              "w-9 h-9 rounded-lg flex items-center justify-center",
-              category === "eval"
-                ? "bg-primary/15 text-primary"
-                : "bg-[hsl(260_70%_65%/0.15)] text-[hsl(260_70%_65%)]"
-            )}
-          >
-            <Icon className="w-4 h-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-              {label}
-              <span className="text-xs text-muted-foreground font-normal bg-[hsl(220_30%_10%/0.6)] px-1.5 py-0.5 rounded">
-                {projects.length}
-              </span>
-            </h3>
-            <p className="text-[11px] text-muted-foreground">{description}</p>
-          </div>
-        </div>
-        <button
-          onClick={() => onCreate(category)}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-primary/10"
-        >
-          <Plus className="w-3.5 h-3.5" />
-          New
-        </button>
-      </div>
-
-      {/* Cards */}
-      <div className="flex-1 space-y-3 min-h-[200px] p-1 -m-1 rounded-xl">
-        <SortableContext
-          items={projects.map((p) => p.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {projects.map((project) => (
-            <SortableProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => onCardClick(project.id)}
-            />
-          ))}
-        </SortableContext>
-
-        {projects.length === 0 && (
-          <div className="rounded-xl border border-dashed border-[hsl(168_50%_40%/0.15)] p-8 text-center">
-            <p className="text-xs text-muted-foreground">
-              No projects yet. Click <span className="text-primary">New</span>{" "}
-              to add one.
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
 
 const Projects = () => {
   const navigate = useNavigate();
-  const { projects, moveProjectCategory, reorderProjects } = useProjects();
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const { projects } = useProjects();
   const [createOpen, setCreateOpen] = useState(false);
   const [createCategory, setCreateCategory] = useState<ProjectCategory>("eval");
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } })
-  );
 
   const evalProjects = projects.filter((p) => p.category === "eval");
   const generalistProjects = projects.filter((p) => p.category === "generalist");
 
-  const findCategory = (id: string): ProjectCategory | null =>
-    projects.find((p) => p.id === id)?.category ?? null;
-
-  const handleDragStart = (event: DragStartEvent) => {
-    const project = projects.find((p) => p.id === event.active.id);
-    if (project) setActiveProject(project);
-  };
-
-  const handleDragOver = (event: DragOverEvent) => {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeCat = findCategory(active.id as string);
-    const overCat =
-      findCategory(over.id as string) ?? (over.id as ProjectCategory);
-
-    if (!activeCat || !overCat || activeCat === overCat) return;
-    moveProjectCategory(active.id as string, overCat);
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveProject(null);
-    if (!over) return;
-
-    const activeCat = findCategory(active.id as string);
-    const overCat = findCategory(over.id as string);
-    if (!activeCat || !overCat || activeCat !== overCat) return;
-
-    const list =
-      activeCat === "eval" ? evalProjects : generalistProjects;
-    const oldIndex = list.findIndex((p) => p.id === active.id);
-    const newIndex = list.findIndex((p) => p.id === over.id);
-    if (oldIndex !== newIndex && oldIndex >= 0 && newIndex >= 0) {
-      reorderProjects(activeCat, arrayMove(list, oldIndex, newIndex));
-    }
-  };
+  const categories: {
+    id: ProjectCategory;
+    label: string;
+    description: string;
+    icon: typeof CheckSquare;
+    projects: typeof evalProjects;
+    accentBg: string;
+    accentText: string;
+    borderHover: string;
+  }[] = [
+    {
+      id: "eval",
+      label: "Evals",
+      description:
+        "Evaluation pipelines, quality reviews, safety audits, and RLHF comparison workflows.",
+      icon: CheckSquare,
+      projects: evalProjects,
+      accentBg: "bg-primary/15",
+      accentText: "text-primary",
+      borderHover: "hover:border-primary/30",
+    },
+    {
+      id: "generalist",
+      label: "Generalists",
+      description:
+        "Open-ended operations, research tasks, data validation, content review, and misc workflows.",
+      icon: Sparkles,
+      projects: generalistProjects,
+      accentBg: "bg-[hsl(260_70%_65%/0.15)]",
+      accentText: "text-[hsl(260_70%_65%)]",
+      borderHover: "hover:border-[hsl(260_70%_65%/0.3)]",
+    },
+  ];
 
   const handleCreate = (cat: ProjectCategory) => {
     setCreateCategory(cat);
@@ -226,37 +67,25 @@ const Projects = () => {
   return (
     <MainLayout
       title="Projects"
-      description="Drag-and-drop AI workflow management."
+      description="AI workflow management — select a category to view projects."
     >
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="text-xs text-muted-foreground">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <span>
             <span className="text-foreground font-semibold">
               {projects.length}
             </span>{" "}
             total projects
-          </div>
+          </span>
           <span className="h-3 w-px bg-border/50" />
-          <div className="text-xs text-muted-foreground">
+          <span>
             <span className="text-foreground font-semibold">
               {projects.reduce((acc, p) => acc + p.members.length, 0)}
             </span>{" "}
             assignments
-          </div>
-          <span className="h-3 w-px bg-border/50" />
-          <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-            <AlertCircle className="w-3 h-3" />
-            <span className="text-foreground font-semibold">
-              {projects.reduce(
-                (acc, p) => acc + p.issues.filter((i) => i.status !== "resolved").length,
-                0
-              )}
-            </span>{" "}
-            open issues
-          </div>
+          </span>
         </div>
-
         <Button
           variant="hero"
           size="sm"
@@ -268,41 +97,151 @@ const Projects = () => {
         </Button>
       </div>
 
-      {/* Kanban */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-      >
-        <div className="flex gap-6 overflow-x-auto pb-4 -mx-2 px-2">
-          <KanbanColumn
-            category="eval"
-            label="Evals"
-            icon={CheckSquare}
-            description="Evaluation pipelines and quality reviews"
-            projects={evalProjects}
-            onCardClick={(id) => navigate(`/hr/projects/${id}`)}
-            onCreate={handleCreate}
-          />
-          <KanbanColumn
-            category="generalist"
-            label="Generalists"
-            icon={Sparkles}
-            description="Open-ended ops & research workflows"
-            projects={generalistProjects}
-            onCardClick={(id) => navigate(`/hr/projects/${id}`)}
-            onCreate={handleCreate}
-          />
-        </div>
+      {/* Category Cards */}
+      <div className="grid gap-6 md:grid-cols-2">
+        {categories.map((cat) => {
+          const activeProjects = cat.projects.filter(
+            (p) => p.status === "active"
+          ).length;
+          const totalMembers = cat.projects.reduce(
+            (acc, p) => acc + p.members.length,
+            0
+          );
+          const openIssues = cat.projects.reduce(
+            (acc, p) =>
+              acc + p.issues.filter((i) => i.status !== "resolved").length,
+            0
+          );
+          const pendingSubmissions = cat.projects.reduce(
+            (acc, p) =>
+              acc + p.submissions.filter((s) => s.status === "pending").length,
+            0
+          );
+          const avgProgress =
+            cat.projects.length > 0
+              ? Math.round(
+                  cat.projects.reduce((acc, p) => acc + p.progress, 0) /
+                    cat.projects.length
+                )
+              : 0;
 
-        <DragOverlay>
-          {activeProject ? (
-            <ProjectCard project={activeProject} dragging />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+          return (
+            <button
+              key={cat.id}
+              onClick={() => navigate(`/hr/projects/${cat.id}`)}
+              className={cn(
+                "dash-glass rounded-2xl p-8 text-left group transition-all duration-300 cursor-pointer",
+                cat.borderHover
+              )}
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div
+                    className={cn(
+                      "w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110",
+                      cat.accentBg
+                    )}
+                  >
+                    <cat.icon className={cn("w-6 h-6", cat.accentText)} />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+                      {cat.label}
+                    </h2>
+                    <p className="text-sm text-muted-foreground mt-0.5">
+                      {activeProjects} active project
+                      {activeProjects !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              </div>
+
+              {/* Description */}
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                {cat.description}
+              </p>
+
+              {/* Stats grid */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-xl bg-[hsl(220_30%_8%/0.5)] border border-[hsl(168_50%_40%/0.06)] p-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Users2 className="w-3.5 h-3.5 text-muted-foreground" />
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                      Members
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold text-foreground">
+                    {totalMembers}
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[hsl(220_30%_8%/0.5)] border border-[hsl(168_50%_40%/0.06)] p-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <FolderKanban className="w-3.5 h-3.5 text-muted-foreground" />
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                      Avg Progress
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold text-foreground">
+                    {avgProgress}%
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[hsl(220_30%_8%/0.5)] border border-[hsl(168_50%_40%/0.06)] p-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <AlertCircle className="w-3.5 h-3.5 text-muted-foreground" />
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                      Open Issues
+                    </span>
+                  </div>
+                  <p
+                    className={cn(
+                      "text-lg font-bold",
+                      openIssues > 0 ? "text-warning" : "text-foreground"
+                    )}
+                  >
+                    {openIssues}
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[hsl(220_30%_8%/0.5)] border border-[hsl(168_50%_40%/0.06)] p-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <CheckSquare className="w-3.5 h-3.5 text-muted-foreground" />
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                      Pending
+                    </span>
+                  </div>
+                  <p className="text-lg font-bold text-foreground">
+                    {pendingSubmissions}
+                  </p>
+                </div>
+              </div>
+
+              {/* Progress bar */}
+              <div className="mt-5">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    Overall Completion
+                  </span>
+                  <span className="text-xs font-semibold text-foreground">
+                    {avgProgress}%
+                  </span>
+                </div>
+                <div className="h-1.5 rounded-full bg-border/40 overflow-hidden">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all duration-700",
+                      cat.id === "eval"
+                        ? "bg-gradient-to-r from-primary to-[hsl(188_90%_55%)]"
+                        : "bg-gradient-to-r from-[hsl(260_70%_65%)] to-[hsl(280_70%_60%)]"
+                    )}
+                    style={{ width: `${avgProgress}%` }}
+                  />
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
 
       {/* Create dialog */}
       <CreateProjectDialog

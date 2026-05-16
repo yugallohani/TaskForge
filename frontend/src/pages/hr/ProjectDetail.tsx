@@ -30,7 +30,7 @@ const formatDate = (iso: string) =>
   });
 
 const ProjectDetail = () => {
-  const { projectId } = useParams<{ projectId: string }>();
+  const { projectId, category } = useParams<{ projectId: string; category: string }>();
   const navigate = useNavigate();
   const { getProject, deleteProject } = useProjects();
   const { toast } = useToast();
@@ -73,7 +73,7 @@ const ProjectDetail = () => {
     if (window.confirm(`Delete "${project.name}"? This cannot be undone.`)) {
       deleteProject(project.id);
       toast({ title: "Project deleted" });
-      navigate("/hr/projects");
+      navigate(`/hr/projects/${category || project.category}`);
     }
   };
 
@@ -81,11 +81,11 @@ const ProjectDetail = () => {
     <MainLayout title={project.name} description={catLabel}>
       {/* Back button */}
       <button
-        onClick={() => navigate("/hr/projects")}
+        onClick={() => navigate(`/hr/projects/${category || project.category}`)}
         className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors mb-4"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
-        Back to Projects
+        Back to {project.category === "eval" ? "Evals" : "Generalists"}
       </button>
 
       {/* Header card */}

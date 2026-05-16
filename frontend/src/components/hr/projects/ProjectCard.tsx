@@ -3,7 +3,6 @@ import {
   Users2,
   CheckCircle2,
   AlertCircle,
-  GripVertical,
 } from "lucide-react";
 import { Project } from "@/types/project";
 import { cn } from "@/lib/utils";
@@ -26,14 +25,12 @@ interface ProjectCardProps {
   project: Project;
   onClick?: () => void;
   dragging?: boolean;
-  dragHandleProps?: Record<string, unknown>;
 }
 
 export const ProjectCard = ({
   project,
   onClick,
   dragging,
-  dragHandleProps,
 }: ProjectCardProps) => {
   const submittedCount = project.members.filter(
     (m) => m.submissionStatus === "submitted"
@@ -53,14 +50,6 @@ export const ProjectCard = ({
       {/* Header */}
       <div className="flex items-start justify-between mb-2.5">
         <div className="flex items-start gap-2 flex-1 min-w-0">
-          <button
-            {...dragHandleProps}
-            onClick={(e) => e.stopPropagation()}
-            className="mt-0.5 text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-grab active:cursor-grabbing"
-            aria-label="Drag handle"
-          >
-            <GripVertical className="w-3.5 h-3.5" />
-          </button>
           <div className="flex-1 min-w-0">
             <h4 className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
               {project.name}

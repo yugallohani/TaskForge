@@ -18,6 +18,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 // HR Dashboard Pages
 const HRDashboard = lazy(() => import("./pages/hr/Dashboard"));
 const HRProjects = lazy(() => import("./pages/hr/Projects"));
+const HRProjectCategory = lazy(() => import("./pages/hr/ProjectCategory"));
 const HRProjectDetail = lazy(() => import("./pages/hr/ProjectDetail"));
 const HRTasks = lazy(() => import("./pages/hr/Tasks"));
 const HREmployees = lazy(() => import("./pages/hr/Employees"));
@@ -61,7 +62,8 @@ const App = () => (
                 <Route path="/hr" element={<HRLayout />}>
                   <Route path="dashboard" element={<HRDashboard />} />
                   <Route path="projects" element={<HRProjects />} />
-                  <Route path="projects/:projectId" element={<HRProjectDetail />} />
+                  <Route path="projects/:category" element={<HRProjectCategory />} />
+                  <Route path="projects/:category/:projectId" element={<HRProjectDetail />} />
                   <Route path="tasks" element={<HRTasks />} />
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="attendance" element={<HRAttendance />} />

@@ -99,7 +99,7 @@ export const CreateProjectDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="dash-glass max-w-2xl border-[hsl(168_50%_40%/0.15)] max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent className="dash-glass border-[hsl(168_50%_40%/0.15)] !top-[5vh] !translate-y-0 max-w-2xl max-h-[90vh] overflow-y-auto p-0">
         <div className="p-6">
           <DialogHeader>
             <DialogTitle>Create new project</DialogTitle>

@@ -156,7 +156,7 @@ export const MembersTab = ({ project }: { project: Project }) => {
 
       {/* Add Members Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="dash-glass max-w-md border-[hsl(168_50%_40%/0.15)] max-h-[85vh] overflow-y-auto">
+        <DialogContent className="dash-glass border-[hsl(168_50%_40%/0.15)] !top-[5vh] !translate-y-0 max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add members</DialogTitle>
             <DialogDescription>

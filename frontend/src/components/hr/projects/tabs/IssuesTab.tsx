@@ -309,7 +309,7 @@ export const IssuesTab = ({ project }: { project: Project }) => {
 
       {/* Create dialog */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="dash-glass max-w-md border-[hsl(168_50%_40%/0.15)] max-h-[85vh] overflow-y-auto">
+        <DialogContent className="dash-glass border-[hsl(168_50%_40%/0.15)] !top-[5vh] !translate-y-0 max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Report an issue</DialogTitle>
             <DialogDescription>
