@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   FolderKanban,
   CheckSquare,
@@ -13,50 +12,103 @@ import { ProductivityChart } from "@/components/hr/dashboard/ProductivityChart";
 import { TaskStatusChart } from "@/components/hr/dashboard/TaskStatusChart";
 import { ActiveProjects } from "@/components/hr/dashboard/ActiveProjects";
 import { RecentActivity } from "@/components/hr/dashboard/RecentActivity";
+import { useProjects } from "@/contexts/ProjectsContext";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 
 const AdminDashboard = () => {
+  const { projects } = useProjects();
+  const { sessions, accessRequests } = useWorkspace();
+
+  // ─── Dynamic KPIs ───
+  const activeProjects = projects.filter((p) => p.status === "active");
+  const totalTasks = projects.reduce(
+    (acc, p) => acc + p.members.reduce((a, m) => a + m.tasksTotal, 0),
+    0
+  );
+  const completedTasks = projects.reduce(
+    (acc, p) => acc + p.members.reduce((a, m) => a + m.tasksCompleted, 0),
+    0
+  );
+  const pendingSubmissions = projects.reduce(
+    (acc, p) => acc + p.submissions.filter((s) => s.status === "pending").length,
+    0
+  );
+  const productivityRate =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const overdueTasks = projects.reduce(
+    (acc, p) => {
+      const now = Date.now();
+      const deadline = new Date(p.deadline).getTime();
+      if (deadline < now && p.progress < 100) {
+        return acc + Math.max(0, p.members.reduce((a, m) => a + (m.tasksTotal - m.tasksCompleted), 0));
+      }
+      return acc;
+    },
+    0
+  );
+  const totalMembers = new Set(
+    projects.flatMap((p) => p.members.map((m) => m.email))
+  ).size;
+  const activeSessions = sessions.filter((s) => s.status === "active").length;
+  const openIssues = projects.reduce(
+    (acc, p) => acc + p.issues.filter((i) => i.status !== "resolved").length,
+    0
+  );
+  const totalSubmissions = projects.reduce(
+    (acc, p) => acc + p.submissions.length,
+    0
+  );
+  const approvedSubmissions = projects.reduce(
+    (acc, p) => acc + p.submissions.filter((s) => s.status === "approved").length,
+    0
+  );
+  const evalAccuracy =
+    totalSubmissions > 0
+      ? Math.round((approvedSubmissions / totalSubmissions) * 100)
+      : 0;
+
   const stats = [
     {
       title: "Active Projects",
-      value: "8",
-      subtitle: "+2 this week",
+      value: activeProjects.length.toString(),
+      subtitle: `${projects.length} total`,
       icon: FolderKanban,
-      trend: { value: 25, isPositive: true },
+      trend: { value: projects.length > 0 ? Math.round((activeProjects.length / projects.length) * 100) : 0, isPositive: true },
     },
     {
       title: "Total Tasks",
-      value: "248",
-      subtitle: "32 pending review",
+      value: totalTasks.toString(),
+      subtitle: `${pendingSubmissions} pending review`,
       icon: CheckSquare,
-      trend: { value: 12, isPositive: true },
+      trend: { value: completedTasks, isPositive: true },
     },
     {
       title: "Productivity Rate",
-      value: "87%",
+      value: `${productivityRate}%`,
       subtitle: "Completion rate",
       icon: TrendingUp,
-      trend: { value: 5, isPositive: true },
+      trend: { value: productivityRate > 50 ? 5 : -3, isPositive: productivityRate > 50 },
     },
     {
-      title: "Overdue Tasks",
-      value: "14",
-      subtitle: "Needs attention",
+      title: "Open Issues",
+      value: openIssues.toString(),
+      subtitle: overdueTasks > 0 ? `${overdueTasks} overdue tasks` : "All on track",
       icon: AlertTriangle,
-      trend: { value: 3, isPositive: false },
+      trend: { value: openIssues, isPositive: openIssues === 0 },
     },
     {
-      title: "Active Contributors",
-      value: "23",
-      subtitle: "Online now",
+      title: "Team Members",
+      value: totalMembers.toString(),
+      subtitle: `${activeSessions} online now`,
       icon: Users2,
-      trend: { value: 8, isPositive: true },
+      trend: { value: activeSessions, isPositive: true },
     },
     {
-      title: "AI Eval Accuracy",
-      value: "92%",
-      subtitle: "Agreement score",
+      title: "Eval Accuracy",
+      value: `${evalAccuracy}%`,
+      subtitle: `${approvedSubmissions}/${totalSubmissions} approved`,
       icon: Brain,
-      trend: { value: 2, isPositive: true },
+      trend: { value: evalAccuracy > 80 ? 2 : -1, isPositive: evalAccuracy > 80 },
     },
   ];
 

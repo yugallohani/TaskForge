@@ -1,15 +1,36 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-
-const data = [
-  { name: "Done", value: 124, color: "hsl(168, 76%, 42%)" },
-  { name: "In Progress", value: 56, color: "hsl(188, 90%, 55%)" },
-  { name: "Review", value: 32, color: "hsl(38, 92%, 50%)" },
-  { name: "To Do", value: 36, color: "hsl(220, 18%, 40%)" },
-];
-
-const total = data.reduce((sum, d) => sum + d.value, 0);
+import { useProjects } from "@/contexts/ProjectsContext";
+import { useMemo } from "react";
 
 export const TaskStatusChart = () => {
+  const { projects } = useProjects();
+
+  const data = useMemo(() => {
+    let completed = 0;
+    let inProgress = 0;
+    let submitted = 0;
+    let notStarted = 0;
+
+    projects.forEach((p) => {
+      p.members.forEach((m) => {
+        completed += m.tasksCompleted;
+        const remaining = m.tasksTotal - m.tasksCompleted;
+        if (m.submissionStatus === "submitted") submitted += remaining;
+        else if (m.submissionStatus === "in_progress") inProgress += remaining;
+        else notStarted += remaining;
+      });
+    });
+
+    return [
+      { name: "Done", value: Math.max(completed, 1), color: "hsl(168, 76%, 42%)" },
+      { name: "In Progress", value: Math.max(inProgress, 1), color: "hsl(188, 90%, 55%)" },
+      { name: "Review", value: Math.max(submitted, 1), color: "hsl(38, 92%, 50%)" },
+      { name: "To Do", value: Math.max(notStarted, 1), color: "hsl(220, 18%, 40%)" },
+    ];
+  }, [projects]);
+
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+
   return (
     <div className="dash-glass rounded-2xl p-6 h-full flex flex-col">
       <div className="mb-4">
