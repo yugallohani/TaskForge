@@ -1,0 +1,31 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="64" height="64" rx="12" fill="url(#bgGradient)"/>
+  
+  <!-- Users Icon -->
+  <g transform="translate(14, 18)">
+    <!-- First Person -->
+    <circle cx="11" cy="8" r="5" fill="white" opacity="0.95"/>
+    <path d="M11 15C6.58172 15 3 18.5817 3 23V26H19V23C19 18.5817 15.4183 15 11 15Z" fill="white" opacity="0.95"/>
+    
+    <!-- Second Person (offset) -->
+    <circle cx="25" cy="8" r="5" fill="white" opacity="0.75"/>
+    <path d="M25 15C20.5817 15 17 18.5817 17 23V26H33V23C33 18.5817 29.4183 15 25 15Z" fill="white" opacity="0.75"/>
+  </g>
+  
+  <!-- Sync/Connection indicator -->
+  <g transform="translate(20, 42)">
+    <circle cx="12" cy="6" r="2" fill="white" opacity="0.9"/>
+    <circle cx="2" cy="6" r="2" fill="white" opacity="0.9"/>
+    <circle cx="22" cy="6" r="2" fill="white" opacity="0.9"/>
+    <line x1="4" y1="6" x2="10" y2="6" stroke="white" stroke-width="1.5" opacity="0.9"/>
+    <line x1="14" y1="6" x2="20" y2="6" stroke="white" stroke-width="1.5" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+# FastAPI and Server
+fastapi==0.110.0
+uvicorn==0.27.1
+python-multipart==0.0.6
+
+# Database
+sqlalchemy>=2.0.35
+psycopg2-binary>=2.9.11
+alembic>=1.12.1
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.1
+
+# Validation - Use Pydantic v2 with pydantic-settings
+pydantic>=2.9.0
+pydantic-settings>=2.5.0
+email-validator>=2.1.1
+
+# Development
+pytest==7.4.3
+httpx==0.25.2
