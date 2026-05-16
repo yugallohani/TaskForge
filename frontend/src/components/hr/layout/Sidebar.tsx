@@ -7,6 +7,7 @@ import {
   Timer,
   BarChart3,
   Activity,
+  ShieldCheck,
   Settings,
   ChevronLeft,
 } from "lucide-react";
@@ -28,11 +29,13 @@ import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
 import Logo from "@/components/homepage/Logo";
 import { useToast } from "@/hooks/use-toast";
+import { useWorkspace } from "@/contexts/WorkspaceContext";
 
 const mainNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: ROUTES.HR.DASHBOARD },
   { icon: FolderKanban, label: "Projects", path: ROUTES.HR.PROJECTS },
   { icon: CheckSquare, label: "Tasks", path: ROUTES.HR.TASKS },
+  { icon: ShieldCheck, label: "Access Requests", path: "/hr/access-requests" },
   { icon: Users2, label: "Team Members", path: ROUTES.HR.EMPLOYEES },
   { icon: Timer, label: "Work Sessions", path: ROUTES.HR.ATTENDANCE },
   { icon: BarChart3, label: "Analytics", path: ROUTES.HR.DASHBOARD, comingSoon: true },
@@ -43,12 +46,17 @@ export const Sidebar = () => {
   const { state, toggleSidebar } = useSidebar();
   const location = useLocation();
   const { toast } = useToast();
+  const { accessRequests } = useWorkspace();
   const isCollapsed = state === "collapsed";
+  const pendingRequests = accessRequests.filter(
+    (r) => r.status === "pending"
+  ).length;
 
   const isActive = (path: string, label: string) => {
     if (label === "Dashboard") return location.pathname === ROUTES.HR.DASHBOARD;
-    if (label === "Projects") return location.pathname === ROUTES.HR.PROJECTS;
+    if (label === "Projects") return location.pathname.startsWith(ROUTES.HR.PROJECTS);
     if (label === "Tasks") return location.pathname === ROUTES.HR.TASKS;
+    if (label === "Access Requests") return location.pathname === "/hr/access-requests";
     if (label === "Team Members") return location.pathname === ROUTES.HR.EMPLOYEES;
     if (label === "Work Sessions") return location.pathname === ROUTES.HR.ATTENDANCE;
     return location.pathname === path;
@@ -129,7 +137,16 @@ export const Sidebar = () => {
                         )}
                       >
                         <item.icon className="h-5 w-5" />
-                        {!isCollapsed && <span>{item.label}</span>}
+                        {!isCollapsed && (
+                          <>
+                            <span>{item.label}</span>
+                            {item.label === "Access Requests" && pendingRequests > 0 && (
+                              <span className="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                                {pendingRequests}
+                              </span>
+                            )}
+                          </>
+                        )}
                       </NavLink>
                     </SidebarMenuButton>
                   )}

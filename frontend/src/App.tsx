@@ -7,7 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ErrorBoundary, PageLoader } from "@/components/common";
 import { UserProvider } from "@/contexts/UserContext";
 import { ProjectsProvider } from "@/contexts/ProjectsContext";
+import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
 import { HRLayout } from "@/components/hr/layout/HRLayout";
+import { MemberLayout } from "@/components/member/layout/MemberLayout";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -25,8 +27,17 @@ const HREmployees = lazy(() => import("./pages/hr/Employees"));
 const HRAttendance = lazy(() => import("./pages/hr/Attendance"));
 const HRLeaveRequests = lazy(() => import("./pages/hr/LeaveRequests"));
 const HRSettings = lazy(() => import("./pages/hr/Settings"));
+const HRAccessRequests = lazy(() => import("./pages/hr/AccessRequests"));
 
-// Employee Dashboard Pages
+// Member Dashboard Pages
+const MemberDashboard = lazy(() => import("./pages/member/Dashboard"));
+const MemberProjects = lazy(() => import("./pages/member/Projects"));
+const MemberProjectCategory = lazy(() => import("./pages/member/ProjectCategory"));
+const MemberProjectDetail = lazy(() => import("./pages/member/ProjectDetail"));
+const MemberWorkSessions = lazy(() => import("./pages/member/WorkSessions"));
+const MemberActivity = lazy(() => import("./pages/member/Activity"));
+
+// Legacy Employee Dashboard Pages (kept for back-compat)
 const EmployeeDashboard = lazy(() => import("./pages/EmployeeDashboard"));
 const EmployeeAttendance = lazy(() => import("./pages/employee/Attendance"));
 const EmployeeTasks = lazy(() => import("./pages/employee/Tasks"));
@@ -47,7 +58,8 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <ProjectsProvider>
-          <TooltipProvider>
+          <WorkspaceProvider>
+            <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -67,11 +79,22 @@ const App = () => (
                   <Route path="tasks" element={<HRTasks />} />
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="attendance" element={<HRAttendance />} />
+                  <Route path="access-requests" element={<HRAccessRequests />} />
                   <Route path="leave-requests" element={<HRLeaveRequests />} />
                   <Route path="settings" element={<HRSettings />} />
                 </Route>
 
-                {/* Employee Dashboard Routes */}
+                {/* Member Dashboard Routes (new) */}
+                <Route path="/member" element={<MemberLayout />}>
+                  <Route path="dashboard" element={<MemberDashboard />} />
+                  <Route path="projects" element={<MemberProjects />} />
+                  <Route path="projects/:category" element={<MemberProjectCategory />} />
+                  <Route path="projects/:category/:projectId" element={<MemberProjectDetail />} />
+                  <Route path="work-sessions" element={<MemberWorkSessions />} />
+                  <Route path="activity" element={<MemberActivity />} />
+                </Route>
+
+                {/* Legacy Employee routes (kept) */}
                 <Route path="/employee/dashboard" element={<EmployeeDashboard />} />
                 <Route path="/employee/attendance" element={<EmployeeAttendance />} />
                 <Route path="/employee/tasks" element={<EmployeeTasks />} />
@@ -83,6 +106,7 @@ const App = () => (
             </Suspense>
           </BrowserRouter>
         </TooltipProvider>
+          </WorkspaceProvider>
         </ProjectsProvider>
       </UserProvider>
     </QueryClientProvider>

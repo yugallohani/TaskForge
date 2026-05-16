@@ -93,6 +93,21 @@ export const ProjectsProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [projects]);
 
+  // Cross-tab sync — listen for changes from other tabs
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === STORAGE_KEY && e.newValue) {
+        try {
+          setProjects(JSON.parse(e.newValue));
+        } catch {
+          /* ignore */
+        }
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
   const getProject = useCallback(
     (id: string) => projects.find((p) => p.id === id),
     [projects]
