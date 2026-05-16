@@ -50,79 +50,116 @@ const LoginSection = () => {
           {loginOptions.map((option) => (
             <div
               key={option.type}
-              className={`group relative glass rounded-2xl p-8 hover:border-primary/50 transition-all duration-500 ${
-                option.primary ? "glow-primary-lg" : ""
-              }`}
+              className={`
+                group relative rounded-2xl p-8 transition-all duration-500 ease-out
+                bg-[hsl(220_30%_7%/0.7)] backdrop-blur-xl
+                border border-[hsl(168_76%_42%/0.08)]
+                hover:border-[hsl(168_76%_42%/0.25)]
+                hover:bg-[hsl(220_30%_7%/0.85)]
+                hover:translate-y-[-2px]
+                hover:shadow-[0_12px_50px_-15px_hsl(168_76%_42%/0.15)]
+                ${option.primary ? "shadow-[0_0_40px_-15px_hsl(168_76%_42%/0.1)]" : ""}
+              `}
             >
+              {/* Gradient border glow on hover */}
+              <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-[hsl(168_76%_42%/0.1)] via-transparent to-[hsl(168_76%_42%/0.05)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+              {/* Ambient glow for primary card */}
               {option.primary && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold">
+                <div className="absolute -inset-6 bg-[hsl(168_76%_42%/0.02)] rounded-3xl blur-2xl pointer-events-none" />
+              )}
+
+              {option.primary && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                  <span className="px-4 py-1 rounded-full bg-primary text-primary-foreground text-xs font-semibold shadow-[0_0_12px_hsl(168_76%_42%/0.3)]">
                     Recommended
                   </span>
                 </div>
               )}
 
-              <div className="flex items-center gap-4 mb-6">
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                  option.primary ? "bg-primary/20" : "bg-secondary"
-                }`}>
-                  <option.icon className={`w-7 h-7 ${option.primary ? "text-primary" : "text-muted-foreground"}`} />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">{option.title}</h3>
-                </div>
-              </div>
-
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                {option.description}
-              </p>
-
-              <ul className="space-y-3 mb-8">
-                {option.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <Link to={option.path}>
-                <Button
-                  variant={option.primary ? "hero" : "heroOutline"}
-                  className="w-full group/btn"
-                  size="lg"
-                >
-                  {option.buttonText}
-                  <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-
-              {/* Admin Demo Credentials or Member Account Creation */}
-              {option.type === "hr" ? (
-                <div className="mt-4 p-3 rounded-lg bg-secondary/50 border border-border/30">
-                  <p className="text-xs text-muted-foreground mb-2 font-medium">Admin Demo Credentials:</p>
-                  <div className="space-y-1 text-xs">
-                    <p className="text-foreground">
-                      <span className="text-muted-foreground">Email:</span>{" "}
-                      <code className="px-1.5 py-0.5 rounded bg-background/50 text-primary">
-                        {DEMO_CREDENTIALS.HR.email}
-                      </code>
-                    </p>
-                    <p className="text-foreground">
-                      <span className="text-muted-foreground">Password:</span>{" "}
-                      <code className="px-1.5 py-0.5 rounded bg-background/50 text-primary">
-                        {DEMO_CREDENTIALS.HR.password}
-                      </code>
-                    </p>
+              <div className="relative z-10">
+                <div className="flex items-center gap-4 mb-6">
+                  <div
+                    className={`
+                      w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-500
+                      ${
+                        option.primary
+                          ? "bg-primary/15 group-hover:bg-primary/20 group-hover:shadow-[0_0_20px_-5px_hsl(168_76%_42%/0.3)]"
+                          : "bg-[hsl(220_30%_15%/0.6)] group-hover:bg-[hsl(220_30%_15%/0.8)]"
+                      }
+                    `}
+                  >
+                    <option.icon
+                      className={`w-7 h-7 transition-colors duration-500 ${
+                        option.primary
+                          ? "text-primary"
+                          : "text-muted-foreground group-hover:text-primary/70"
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-foreground group-hover:text-foreground/95 transition-colors">
+                      {option.title}
+                    </h3>
                   </div>
                 </div>
-              ) : (
-                <div className="mt-4 p-3 rounded-lg bg-secondary/50 border border-border/30">
-                  <p className="text-xs text-muted-foreground text-center">
-                    Create an account to join your team workspace
-                  </p>
-                </div>
-              )}
+
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  {option.description}
+                </p>
+
+                <ul className="space-y-3 mb-8">
+                  {option.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-center gap-3 text-sm text-muted-foreground"
+                    >
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary/60 group-hover:bg-primary transition-colors duration-500" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link to={option.path}>
+                  <Button
+                    variant={option.primary ? "hero" : "heroOutline"}
+                    className="w-full group/btn"
+                    size="lg"
+                  >
+                    {option.buttonText}
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+
+                {/* Credentials / Info */}
+                {option.type === "hr" ? (
+                  <div className="mt-4 p-3 rounded-xl bg-[hsl(220_30%_10%/0.5)] border border-[hsl(168_76%_42%/0.06)]">
+                    <p className="text-xs text-muted-foreground mb-2 font-medium">
+                      Admin Demo Credentials:
+                    </p>
+                    <div className="space-y-1 text-xs">
+                      <p className="text-foreground">
+                        <span className="text-muted-foreground">Email:</span>{" "}
+                        <code className="px-1.5 py-0.5 rounded bg-[hsl(168_76%_42%/0.08)] text-primary">
+                          {DEMO_CREDENTIALS.HR.email}
+                        </code>
+                      </p>
+                      <p className="text-foreground">
+                        <span className="text-muted-foreground">Password:</span>{" "}
+                        <code className="px-1.5 py-0.5 rounded bg-[hsl(168_76%_42%/0.08)] text-primary">
+                          {DEMO_CREDENTIALS.HR.password}
+                        </code>
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4 p-3 rounded-xl bg-[hsl(220_30%_10%/0.5)] border border-[hsl(168_76%_42%/0.06)]">
+                    <p className="text-xs text-muted-foreground text-center">
+                      Create an account to join your team workspace
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
