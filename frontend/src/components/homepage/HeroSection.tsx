@@ -7,9 +7,9 @@ import FloatingCards from "./FloatingCards";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Hero-local accent glows (additive on top of the global immersive bg) */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl float pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/10 rounded-full blur-3xl float-delayed pointer-events-none" />
+      {/* Hero-local accent glows — very subtle */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/[0.03] rounded-full blur-3xl float pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-primary/[0.05] rounded-full blur-3xl float-delayed pointer-events-none" />
 
       {/* Floating Mac-style mini widgets */}
       <FloatingCards />
@@ -27,7 +27,7 @@ const HeroSection = () => {
           {/* Breathing glow behind heading */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[600px] h-[200px] rounded-full bg-primary/8 blur-[100px] breathe-glow" />
+              <div className="w-[600px] h-[200px] rounded-full bg-primary/[0.04] blur-[100px] breathe-glow" />
             </div>
 
             {/* Main Heading */}

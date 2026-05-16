@@ -804,17 +804,17 @@
     background:
       linear-gradient(
         180deg,
-        hsl(220 30% 14% / 0.28) 0%,
-        hsl(220 30% 8% / 0.22) 100%
+        hsl(220 30% 12% / 0.35) 0%,
+        hsl(220 30% 7% / 0.28) 100%
       );
-    -webkit-backdrop-filter: blur(28px) saturate(160%);
-            backdrop-filter: blur(28px) saturate(160%);
-    border: 1px solid hsl(168 76% 70% / 0.14);
+    -webkit-backdrop-filter: blur(28px) saturate(150%);
+            backdrop-filter: blur(28px) saturate(150%);
+    border: 1px solid hsl(168 76% 60% / 0.09);
     box-shadow:
-      0 8px 28px -10px hsl(220 40% 2% / 0.45),
-      0 0 24px -8px hsl(168 76% 50% / 0.14),
-      inset 0 1px 0 hsl(168 76% 90% / 0.08),
-      inset 0 -1px 0 hsl(220 30% 2% / 0.18);
+      0 8px 28px -10px hsl(220 40% 2% / 0.5),
+      0 0 20px -10px hsl(168 76% 50% / 0.08),
+      inset 0 1px 0 hsl(168 76% 90% / 0.05),
+      inset 0 -1px 0 hsl(220 30% 2% / 0.2);
   }
 
   /* Subtle highlight sliver along the top edge — catches ambient light */
@@ -826,10 +826,10 @@
     pointer-events: none;
     background: linear-gradient(
       180deg,
-      hsl(168 76% 90% / 0.06) 0%,
-      transparent 35%
+      hsl(168 76% 90% / 0.04) 0%,
+      transparent 30%
     );
-    opacity: 0.9;
+    opacity: 0.8;
   }
 
   /* Hover/interactive state */
@@ -846,21 +846,21 @@
     background:
       linear-gradient(
         180deg,
-        hsl(220 30% 16% / 0.36) 0%,
-        hsl(220 30% 10% / 0.28) 100%
+        hsl(220 30% 14% / 0.42) 0%,
+        hsl(220 30% 9% / 0.34) 100%
       );
-    border-color: hsl(168 76% 60% / 0.34);
+    border-color: hsl(168 76% 55% / 0.22);
     box-shadow:
-      0 14px 38px -10px hsl(220 40% 2% / 0.55),
-      0 0 44px -10px hsl(168 76% 50% / 0.4),
-      inset 0 1px 0 hsl(168 76% 90% / 0.14),
-      inset 0 -1px 0 hsl(220 30% 2% / 0.18);
+      0 14px 38px -10px hsl(220 40% 2% / 0.6),
+      0 0 36px -10px hsl(168 76% 50% / 0.2),
+      inset 0 1px 0 hsl(168 76% 90% / 0.08),
+      inset 0 -1px 0 hsl(220 30% 2% / 0.2);
   }
 
   /* Soft icon illumination when the parent .tf-glass-hover is hovered */
   .tf-glass-hover:hover .tf-icon-illum {
-    background: hsl(168 76% 50% / 0.22);
-    box-shadow: 0 0 20px -2px hsl(168 76% 50% / 0.45);
+    background: hsl(168 76% 50% / 0.18);
+    box-shadow: 0 0 16px -2px hsl(168 76% 50% / 0.35);
   }
   .tf-icon-illum {
     transition: background-color 0.4s ease, box-shadow 0.4s ease;
