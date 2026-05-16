@@ -1,20 +1,20 @@
+import ParticleCanvas from "./ParticleCanvas";
+
 /**
  * HomepageBackground
  * ------------------
  * One continuous, fixed canvas that lives behind the entire homepage.
- * Cinematic aurora + soft radial glows + faint floating particles —
- * inspired by Linear, Vercel, and modern AI startup landing pages.
  *
  * Layers (back to front):
- *   1. Deep navy base wash with subtle top glow
- *   2. Cinematic vignette (top lift + bottom fade)
- *   3. Two drifting aurora meshes (counter-moving)
- *   4. Three floating ambient orbs in teal / cyan / emerald
- *   5. Very subtle drifting particle field
+ *   1. Deep navy base wash
+ *   2. Cinematic vignette
+ *   3. Drifting aurora meshes (counter-moving)
+ *   4. Floating ambient orbs (teal / cyan / emerald)
+ *   5. Animated particle network (canvas, requestAnimationFrame)
  *
  * Pointer-events disabled so the background never intercepts clicks.
- * All animation uses transform + opacity only and respects
- * prefers-reduced-motion.
+ * All animation uses transform + opacity (CSS) or a single canvas
+ * (JS) and respects prefers-reduced-motion.
  */
 const HomepageBackground = () => {
   return (
@@ -37,8 +37,8 @@ const HomepageBackground = () => {
       <div className="tf-orb tf-orb-b" />
       <div className="tf-orb tf-orb-c" />
 
-      {/* Subtle drifting particles */}
-      <div className="absolute inset-0 tf-particles" />
+      {/* Animated particle network */}
+      <ParticleCanvas />
     </div>
   );
 };

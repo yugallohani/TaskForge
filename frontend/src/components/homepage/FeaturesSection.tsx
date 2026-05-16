@@ -52,7 +52,7 @@ const FeaturesSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-wider uppercase">
+          <span className="text-primary text-sm font-semibold tracking-wider uppercase float-subtle">
             Features
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mt-4 mb-6">
@@ -69,13 +69,13 @@ const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className="group glass glass-hover rounded-2xl p-6 hover:glow-primary transition-all duration-500"
+              className={`group glass card-glow-hover rounded-2xl p-6 card-float-${(index % 6) + 1}`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                 <feature.icon className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-foreground">
+              <h3 className="text-xl font-semibold mb-2 text-foreground group-hover:text-primary transition-colors duration-300">
                 {feature.title}
               </h3>
               <p className="text-muted-foreground leading-relaxed">

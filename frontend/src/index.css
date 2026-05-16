@@ -398,7 +398,393 @@
   .tf-orb-a,
   .tf-orb-b,
   .tf-orb-c,
-  .tf-particles {
+  .tf-particles,
+  .tf-particle,
+  .float-subtle,
+  .float-gentle,
+  .breathe-glow {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TaskForge — Ambient Motion System
+   Subtle floating, breathing, and particle effects that make
+   the homepage feel alive without distracting from content.
+   ───────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  /* Subtle float — very gentle vertical drift for badges/pills */
+  .float-subtle {
+    animation: tf-float-subtle 6s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* Gentle float — slightly more movement for cards */
+  .float-gentle {
+    animation: tf-float-gentle 7s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* Breathing glow — soft pulsing radial glow behind headings */
+  .breathe-glow {
+    animation: tf-breathe 5s ease-in-out infinite;
+    will-change: opacity;
+  }
+
+  /* Feature card ambient float — each card gets a slightly different timing */
+  .card-float-1 { animation: tf-float-gentle 7s ease-in-out infinite; }
+  .card-float-2 { animation: tf-float-gentle 8s ease-in-out 0.5s infinite; }
+  .card-float-3 { animation: tf-float-gentle 7.5s ease-in-out 1s infinite; }
+  .card-float-4 { animation: tf-float-gentle 8.5s ease-in-out 1.5s infinite; }
+  .card-float-5 { animation: tf-float-gentle 7s ease-in-out 2s infinite; }
+  .card-float-6 { animation: tf-float-gentle 8s ease-in-out 2.5s infinite; }
+
+  /* Enhanced hover lift for cards */
+  .card-hover-lift {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .card-hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      0 0 40px -10px hsl(168 76% 42% / 0.35),
+      0 20px 40px -15px hsl(220 30% 5% / 0.5);
+  }
+
+  /* Individual floating particle dot */
+  .tf-particle {
+    position: absolute;
+    border-radius: 9999px;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+}
+
+/* Subtle float — 4px vertical drift */
+@keyframes tf-float-subtle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+/* Gentle float — 6px vertical drift */
+@keyframes tf-float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Breathing glow pulse */
+@keyframes tf-breathe {
+  0%, 100% { opacity: 0.4; }
+  50%      { opacity: 0.7; }
+}
+
+/* Particle rise animations — multiple speeds for variety */
+@keyframes tf-particle-rise-slow {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate3d(20px, -100vh, 0); opacity: 0; }
+}
+
+@keyframes tf-particle-rise-med {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.8; }
+  100% { transform: translate3d(-15px, -100vh, 0); opacity: 0; }
+}
+
+@keyframes tf-particle-rise-fast {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.6; }
+  100% { transform: translate3d(10px, -100vh, 0); opacity: 0; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Floating Mac-style mini cards — gentle 3-axis drift
+   ───────────────────────────────────────────────────────────── */
+@layer utilities {
+  .animate-tf-float-card {
+    animation: tf-float-card 9s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes tf-float-card {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33%      { transform: translate3d(6px, -10px, 0); }
+  66%      { transform: translate3d(-4px, -6px, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-tf-float-card {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Premium teal hover glow for feature cards
+   ───────────────────────────────────────────────────────────── */
+@layer utilities {
+  .card-glow-hover {
+    position: relative;
+    transition:
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+  .card-glow-hover::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      hsl(168 76% 50% / 0.5),
+      hsl(188 90% 55% / 0.3),
+      hsl(168 76% 50% / 0.5)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .card-glow-hover:hover {
+    transform: translateY(-6px);
+    border-color: hsl(168 76% 42% / 0.45);
+    box-shadow:
+      0 0 50px -10px hsl(168 76% 42% / 0.4),
+      0 20px 40px -15px hsl(220 30% 5% / 0.6);
+  }
+  .card-glow-hover:hover::before {
+    opacity: 1;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   TaskForge — Dynamic Island Navbar
+   Floating glass capsule navigation inspired by Apple Dynamic
+   Island and visionOS. Pure CSS, GPU-friendly, fully responsive.
+   ───────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  /* The capsule itself */
+  .island-shell {
+    position: relative;
+    border-radius: 9999px;
+    background:
+      linear-gradient(
+        180deg,
+        hsl(220 30% 14% / 0.32) 0%,
+        hsl(220 30% 8% / 0.26) 100%
+      );
+    -webkit-backdrop-filter: blur(36px) saturate(160%);
+            backdrop-filter: blur(36px) saturate(160%);
+    border: 1px solid hsl(168 76% 70% / 0.12);
+    box-shadow:
+      0 0 0 1px hsl(220 30% 2% / 0.15),
+      0 6px 24px -8px hsl(220 40% 2% / 0.35),
+      0 0 32px -8px hsl(168 76% 50% / 0.18),
+      inset 0 1px 0 hsl(168 76% 90% / 0.1),
+      inset 0 -1px 0 hsl(220 30% 2% / 0.2);
+    transition:
+      padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.5s ease,
+      box-shadow 0.5s ease,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: tf-island-float 6s ease-in-out infinite;
+    will-change: transform;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  /* Compact (scrolled) state — slightly tighter, brighter teal halo */
+  .island-shell--compact {
+    background:
+      linear-gradient(
+        180deg,
+        hsl(220 30% 14% / 0.40) 0%,
+        hsl(220 30% 8% / 0.32) 100%
+      );
+    border-color: hsl(168 76% 70% / 0.22);
+    box-shadow:
+      0 0 0 1px hsl(220 30% 2% / 0.2),
+      0 8px 28px -8px hsl(220 40% 2% / 0.45),
+      0 0 44px -8px hsl(168 76% 50% / 0.32),
+      inset 0 1px 0 hsl(168 76% 90% / 0.12),
+      inset 0 -1px 0 hsl(220 30% 2% / 0.2);
+  }
+
+  /* Animated gradient sheen sliding across the capsule */
+  .island-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 35%,
+      hsl(168 76% 60% / 0.18) 48%,
+      hsl(188 90% 60% / 0.12) 52%,
+      transparent 65%
+    );
+    background-size: 220% 100%;
+    background-position: 220% 50%;
+    animation: tf-island-sheen 7s linear infinite;
+    mix-blend-mode: screen;
+    z-index: 0;
+  }
+
+  .island-shell > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Ambient glow that lives behind the capsule */
+  .island-ambient-glow {
+    width: clamp(280px, 60vw, 560px);
+    height: 90px;
+    border-radius: 9999px;
+    filter: blur(70px);
+    background: radial-gradient(
+      ellipse at center,
+      hsl(168 76% 55% / 0.32) 0%,
+      hsl(188 90% 55% / 0.16) 45%,
+      transparent 75%
+    );
+    opacity: 0.85;
+    animation: tf-island-glow-pulse 5s ease-in-out infinite;
+  }
+
+  /* Vertical divider between island sections */
+  .island-divider {
+    width: 1px;
+    height: 22px;
+    margin: 0 0.4rem;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      hsl(168 76% 60% / 0.25),
+      transparent
+    );
+    flex-shrink: 0;
+  }
+
+  /* Nav link pill inside the island */
+  .island-nav-item {
+    position: relative;
+    padding: 0.42rem 0.85rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: hsl(215 20% 78%);
+    border-radius: 9999px;
+    white-space: nowrap;
+    transition:
+      color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.3s ease;
+  }
+  .island-nav-item:hover {
+    color: hsl(168 76% 60%);
+    background: hsl(168 76% 50% / 0.1);
+    transform: scale(1.03);
+  }
+  /* Soft illumination on hover — animated underline dot */
+  .island-nav-item::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(168 76% 55%),
+      hsl(188 90% 60%),
+      transparent
+    );
+    border-radius: 9999px;
+    transform: translateX(-50%);
+    transition: width 0.35s ease;
+  }
+  .island-nav-item:hover::after {
+    width: 22px;
+  }
+
+  /* Logo wrapper inside the island */
+  .island-logo {
+    padding: 0 0.4rem;
+    border-radius: 9999px;
+    transition: transform 0.3s ease;
+  }
+  .island-logo:hover {
+    transform: scale(1.04);
+  }
+
+  /* Mobile menu icon button inside the island */
+  .island-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 9999px;
+    color: hsl(210 40% 90%);
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  }
+  .island-menu-btn:hover {
+    background: hsl(168 76% 50% / 0.12);
+    color: hsl(168 76% 60%);
+    transform: scale(1.05);
+  }
+
+  /* Mobile drop-down panel that morphs out from the island */
+  .island-mobile-panel {
+    border-radius: 1.5rem;
+    background:
+      linear-gradient(
+        180deg,
+        hsl(220 30% 14% / 0.45) 0%,
+        hsl(220 30% 8% / 0.38) 100%
+      );
+    -webkit-backdrop-filter: blur(36px) saturate(160%);
+            backdrop-filter: blur(36px) saturate(160%);
+    border: 1px solid hsl(168 76% 70% / 0.14);
+    box-shadow:
+      0 12px 36px -12px hsl(220 40% 2% / 0.55),
+      0 0 32px -8px hsl(168 76% 50% / 0.18),
+      inset 0 1px 0 hsl(168 76% 90% / 0.08);
+  }
+}
+
+@keyframes tf-island-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+@keyframes tf-island-sheen {
+  0%   { background-position: 220% 50%; }
+  100% { background-position: -120% 50%; }
+}
+
+@keyframes tf-island-glow-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%      { opacity: 0.95; transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .island-shell,
+  .island-shell::after,
+  .island-ambient-glow {
     animation: none !important;
   }
 }
