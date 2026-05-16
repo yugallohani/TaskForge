@@ -42,14 +42,10 @@ export const ProductivityChart = () => {
         0
       );
 
-      // Add baseline for visual appeal when data is sparse
-      const baseHours = i < 5 ? 2 + Math.random() * 3 : Math.random() * 1.5;
-      const baseSubmissions = i < 5 ? 1 + Math.floor(Math.random() * 3) : Math.floor(Math.random() * 2);
-
       return {
         day,
-        tasks: Math.round((dayHours + baseHours) * 3), // approximate tasks from hours
-        reviews: daySubmissions + baseSubmissions,
+        tasks: Math.round(dayHours * 3), // approximate tasks from hours
+        reviews: daySubmissions,
       };
     });
   }, [sessions, projects]);

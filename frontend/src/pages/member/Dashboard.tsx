@@ -59,23 +59,23 @@ const getGreeting = () => {
   return "Good evening";
 };
 
-// ─── Mock weekly data (would come from real session history) ───
-const generateWeeklyData = (sessions: { startedAt: string; durationSeconds?: number; status: string }[]) => {
+// ─── Build weekly data from REAL sessions only ───
+const buildWeeklyData = (sessions: { startedAt: string; durationSeconds?: number; status: string }[]) => {
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const today = new Date();
   const dayOfWeek = today.getDay(); // 0=Sun
   return days.map((day, i) => {
-    // Calculate hours for each day from sessions
     const targetDay = new Date(today);
     const offset = i - ((dayOfWeek + 6) % 7); // Mon=0
     targetDay.setDate(today.getDate() + offset);
     const dayStr = targetDay.toDateString();
     const dayHours = sessions
       .filter((s) => new Date(s.startedAt).toDateString() === dayStr)
-      .reduce((acc, s) => acc + (s.durationSeconds || 0) / 3600, 0);
-    // Add some baseline for visual appeal
-    const baseline = i < 5 ? Math.random() * 2 + 1 : Math.random() * 0.5;
-    return { day, hours: Math.round((dayHours + baseline) * 10) / 10 };
+      .reduce((acc, s) => {
+        const dur = s.durationSeconds || (s.status === "active" ? Math.floor((Date.now() - new Date(s.startedAt).getTime()) / 1000) : 0);
+        return acc + dur / 3600;
+      }, 0);
+    return { day, hours: Math.round(dayHours * 100) / 100 };
   });
 };
 
@@ -181,7 +181,8 @@ const MemberDashboard = () => {
     { completed: 0, total: 0, submitted: 0, inProgress: 0, notStarted: 0 }
   );
 
-  const weeklyData = generateWeeklyData(mySessions);
+  const weeklyData = buildWeeklyData(mySessions);
+  const hasWeeklyData = weeklyData.some((d) => d.hours > 0);
 
   const donutData = [
     { name: "Completed", value: taskBreakdown.completed, color: "hsl(168, 76%, 42%)" },
@@ -309,6 +310,7 @@ const MemberDashboard = () => {
             </div>
           </div>
           <div className="h-[180px]">
+            {hasWeeklyData ? (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={weeklyData}>
                 <defs>
@@ -338,6 +340,14 @@ const MemberDashboard = () => {
                 />
               </AreaChart>
             </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center">
+                <Timer className="w-8 h-8 text-muted-foreground/30 mb-2" />
+                <p className="text-xs text-muted-foreground">
+                  Start your first work session to generate analytics
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
