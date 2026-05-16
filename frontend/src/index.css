@@ -905,3 +905,52 @@
       inset 0 1px 0 hsl(168 50% 80% / 0.06);
   }
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   TaskForge — Hero Orb (cinematic floating core)
+   Ultra-slow autonomous rotation + breathing. No hover.
+   ───────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .animate-orb-rotate {
+    animation: tf-orb-rotate 45s linear infinite;
+    will-change: transform;
+  }
+  .animate-orb-rotate-reverse {
+    animation: tf-orb-rotate 60s linear infinite reverse;
+    will-change: transform;
+  }
+  .animate-orb-breathe {
+    animation: tf-orb-breathe 12s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  .animate-orb-pulse {
+    animation: tf-orb-rotate 35s linear infinite, tf-orb-pulse 8s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+}
+
+@keyframes tf-orb-rotate {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes tf-orb-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50%      { transform: scale(1.04); opacity: 1; }
+}
+
+@keyframes tf-orb-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-orb-rotate,
+  .animate-orb-rotate-reverse,
+  .animate-orb-breathe,
+  .animate-orb-pulse {
+    animation: none !important;
+  }
+}
