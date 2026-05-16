@@ -62,8 +62,8 @@ const ParticleCanvas = () => {
         this.y = Math.random() * height;
         this.vx = (Math.random() - 0.5) * 0.3;
         this.vy = (Math.random() - 0.5) * 0.3;
-        this.size = Math.random() * 1.4 + 0.6;
-        this.opacity = Math.random() * 0.5 + 0.25;
+        this.size = Math.random() * 1.6 + 0.7;
+        this.opacity = Math.random() * 0.55 + 0.3;
         // Mostly teal, occasionally a hint of cyan for variety
         this.hue = Math.random() < 0.25 ? 188 : 168;
       }
@@ -79,8 +79,15 @@ const ParticleCanvas = () => {
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${this.hue}, 76%, 60%, ${this.opacity})`;
+        ctx.fillStyle = `hsla(${this.hue}, 76%, 65%, ${this.opacity})`;
         ctx.fill();
+        // Subtle glow bloom
+        if (this.size > 1.2) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${this.hue}, 76%, 55%, ${this.opacity * 0.12})`;
+          ctx.fill();
+        }
       }
     }
 
@@ -104,12 +111,12 @@ const ParticleCanvas = () => {
           const distSq = dx * dx + dy * dy;
           if (distSq < maxDistSq) {
             const dist = Math.sqrt(distSq);
-            const alpha = 0.18 * (1 - dist / maxDist);
+            const alpha = 0.24 * (1 - dist / maxDist);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = `hsla(168, 76%, 55%, ${alpha})`;
-            ctx.lineWidth = 0.6;
+            ctx.lineWidth = 0.7;
             ctx.stroke();
           }
         }

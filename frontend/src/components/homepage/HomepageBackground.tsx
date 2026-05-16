@@ -45,8 +45,8 @@ const HomepageBackground = () => {
       <div className="tf-orb tf-orb-b opacity-[0.12]" />
       <div className="tf-orb tf-orb-c opacity-[0.10]" />
 
-      {/* Layer 5: Particle network — subtle */}
-      <div className="absolute inset-0 opacity-[0.40]">
+      {/* Layer 5: Particle network — slightly more visible */}
+      <div className="absolute inset-0 opacity-[0.55]">
         <ParticleCanvas />
       </div>
 
