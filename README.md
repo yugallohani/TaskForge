@@ -1,153 +1,243 @@
-# StaffSync - HR & Employee Management System
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-0.110-009688?style=for-the-badge&logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Railway-Deployed-0B0D0E?style=for-the-badge&logo=railway&logoColor=white" />
+</p>
 
-A modern, fully functional HR and Employee Management System with separate portals for HR administrators and employees.
+<h1 align="center">⚡ TaskForge</h1>
 
-## 🌐 Live Application
+<p align="center">
+  <strong>A modern, full-stack workforce management platform built for teams that move fast.</strong><br/>
+  Role-based dashboards · Real-time attendance · Task pipelines · Leave management
+</p>
 
-**Frontend (Vercel):** https://staff-sync-ldc9.vercel.app  
-**Backend API (Render):** https://staffsync-backend-w5dd.onrender.com  
-**API Documentation:** https://staffsync-backend-w5dd.onrender.com/docs
-
-> **Note:** The backend is hosted on Render's free tier. The first request after 15 minutes of inactivity may take ~30 seconds as the server wakes up.
-
----
-
-## ⚠️ Important: About the Data
-
-**The application is fully dynamic and functional** - all data is stored in a real PostgreSQL database and can be created, updated, and deleted through the interface.
-
-**Dummy Data for Testing:**
-The HR portal currently shows 4 pre-loaded employees with Indian names. This dummy data was added for testing and demonstration purposes only. The system is **not static** - you can:
-- Add new employees
-- Edit existing employee information
-- Delete employees
-- Mark attendance
-- All changes are saved to the database in real-time
-
-The dummy data simply provides a starting point to explore the features without having to manually create test data.
+<p align="center">
+  <a href="https://intelligent-fulfillment-production-5ef7.up.railway.app">🌐 Live Demo</a> &nbsp;·&nbsp;
+  <a href="https://taskforge-production-5bfc.up.railway.app/docs">📖 API Docs</a> &nbsp;·&nbsp;
+  <a href="#-quick-start">🚀 Quick Start</a>
+</p>
 
 ---
 
-## 📸 Application Screenshots
+## 📸 Screenshots
 
 ### Homepage
-![Homepage](screenshots/homepage.png)
-*Modern landing page with clear navigation to HR and Employee portals*
+<img src="screenshots/homepage.png" alt="TaskForge Homepage" width="100%" />
 
-### HR Portal Dashboard
-![HR Dashboard](screenshots/hr%20portal.png)
-*Comprehensive HR dashboard with real-time statistics, attendance charts, and recent activity feed*
+### Admin Dashboard
+<img src="screenshots/admin.png" alt="Admin Dashboard" width="100%" />
 
-### Employee Portal Dashboard
-![Employee Dashboard](screenshots/employee%20portal.png)
-*Personalized employee dashboard with performance metrics, tasks, and quick actions*
+### Member — Project View
+<img src="screenshots/project-member.png" alt="Member Project View" width="100%" />
 
 ---
 
-## 📖 About the Project
+## 🎯 What is TaskForge?
 
-StaffSync is a complete HR management solution that provides two distinct portals:
+TaskForge is a production-ready HR and workforce management system with **two distinct portals**:
 
-### HR Portal
-HR administrators can:
-- View dashboard with real-time statistics
-- Manage employees (add, edit, delete)
-- Track and mark attendance
-- View recent activity feed
-- Access employee performance data
+| Portal | Who it's for | What they can do |
+|--------|-------------|-----------------|
+| **Admin (HR)** | Managers & HR staff | Manage employees, track attendance, assign tasks, handle leave requests, view analytics |
+| **Member (Employee)** | Team members | Punch in/out, manage tasks, submit leave requests, view projects, upload documents |
 
-### Employee Portal
-Employees can:
-- View personalized dashboard
-- Check in/out for attendance
-- View attendance history
-- Manage tasks
-- Upload and view documents
-- Read company announcements
+All data is **real and persistent** — stored in a PostgreSQL database on Railway. Every action (creating employees, marking attendance, approving leaves) is saved in real-time.
 
 ---
 
-## 🏗️ Project Structure
+## 🔑 Access the Live App
+
+### Admin Portal
+
+Use the pre-configured demo credentials:
 
 ```
-StaffSync/
-├── backend/          # FastAPI backend server
-│   ├── app/
-│   │   ├── api/      # API endpoints (auth, hr, employee)
-│   │   ├── models/   # Database models
-│   │   ├── schemas/  # Request/response schemas
-│   │   └── core/     # Security and authentication
-│   └── requirements.txt
-│
-└── frontend/         # React frontend application
-    ├── src/
-    │   ├── pages/    # Page components
-    │   ├── components/ # Reusable components
-    │   └── lib/      # API client and utilities
-    └── package.json
-```
-
----
-
-## � Technology Stack
-
-**Backend:**
-- FastAPI (Python web framework)
-- PostgreSQL (Production database)
-- SQLAlchemy (ORM)
-- JWT (Authentication)
-- Pydantic (Data validation)
-
-**Frontend:**
-- React with TypeScript
-- Vite (Build tool)
-- Tailwind CSS (Styling)
-- Axios (API calls)
-- React Router (Navigation)
-
----
-
-## 🔑 Login Credentials
-
-### HR Portal
-**You must use the dummy credentials to access the HR portal:**
-```
-Email: hr@staffsync.com
+Email:    hr@staffsync.com
 Password: demo123
 ```
 
-### Employee Portal
-**You have two options:**
+### Member Portal
 
-**Option 1: Create Your Own Account (Recommended)**
+**Create your own account** — click "Sign Up" on the homepage, fill in your details, and you're in.
 
-- Click "Sign Up" on the homepage
-- Fill in your details
-- Login with your new credentials
-
-**Option 2: Use Dummy Employee Account**
-```
-Email: rahul.sharma@staffsync.com
-Password: employee123
-```
-
-> **Note:** Creating your own account is recommended to experience the full registration flow and have personalized data.
+> Members who sign up are automatically registered as employees. The admin will see new signups in their dashboard.
 
 ---
 
-## 🚀 Running Locally
+## ✨ Key Features
 
-### Backend Setup
+### 👔 Admin (HR) Portal
+
+| Feature | Description |
+|---------|-------------|
+| **Dashboard Analytics** | Real-time stats — total employees, attendance rate, department distribution, monthly trends |
+| **Employee Management** | Add, edit, deactivate employees. Full CRUD with search, filter, and pagination |
+| **Attendance Tracking** | View all employee attendance records. Manually mark attendance for any employee |
+| **Task Assignment** | Create and assign tasks to employees with priority levels and deadlines |
+| **Leave Management** | Review, approve, or reject leave requests submitted by members |
+| **Notifications** | Send notifications to individual employees or broadcast to all |
+| **Project Pipelines** | Organize work into Eval and Generalist project categories |
+| **AI Insights** | Analytics-driven insights on workforce performance |
+| **Access Requests** | Manage new member access and role assignments |
+
+### 👤 Member (Employee) Portal
+
+| Feature | Description |
+|---------|-------------|
+| **Punch In / Punch Out** | One-click attendance marking. Late detection if check-in is after 9:30 AM |
+| **Attendance History** | View personal attendance records with monthly summaries and rates |
+| **Task Management** | View assigned tasks, create personal tasks, update status (pending → in-progress → completed) |
+| **Leave Requests** | Submit leave requests (sick, vacation, personal, emergency) with date ranges and reasons |
+| **Document Upload** | Upload and manage personal documents (contracts, reports, policies) |
+| **Announcements** | View company-wide announcements from HR |
+| **Notifications** | Receive real-time notifications from admin |
+| **Projects & Work Sessions** | Participate in assigned projects, track work sessions and activity |
+
+---
+
+## 🔄 How It Works — Core Workflows
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        MEMBER SIGNS UP                           │
+├─────────────────────────────────────────────────────────────────┤
+│  1. Member creates account → auto-registered as employee        │
+│  2. Admin receives notification of new signup                   │
+│  3. Member can immediately punch in, view tasks, submit leaves  │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                     ATTENDANCE FLOW                              │
+├─────────────────────────────────────────────────────────────────┤
+│  Member: Punch In → Work → Punch Out                            │
+│  Admin:  Views all attendance in dashboard + analytics           │
+│  System: Auto-calculates hours worked, flags late arrivals       │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                     LEAVE REQUEST FLOW                           │
+├─────────────────────────────────────────────────────────────────┤
+│  Member: Submits leave request (type, dates, reason)            │
+│  Admin:  Reviews pending requests → Approves / Rejects          │
+│  System: Updates attendance records, notifies member             │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                       TASK FLOW                                  │
+├─────────────────────────────────────────────────────────────────┤
+│  Admin:  Creates task → assigns to employee with deadline       │
+│  Member: Views task → updates status → marks complete           │
+│  Both:   Can raise issues and track progress                    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏗️ Architecture
+
+```
+TaskForge/
+├── frontend/                 # React + TypeScript SPA
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── hr/          # Admin portal pages
+│   │   │   ├── member/      # Member portal pages
+│   │   │   └── employee/    # Employee sub-pages
+│   │   ├── components/      # Reusable UI components (shadcn/ui)
+│   │   ├── contexts/        # React context providers
+│   │   ├── hooks/           # Custom React hooks
+│   │   └── lib/             # API client, utilities
+│   └── package.json
+│
+├── backend/                  # FastAPI Python server
+│   ├── app/
+│   │   ├── api/             # Route handlers (auth, hr, employee)
+│   │   ├── models/          # SQLAlchemy ORM models
+│   │   ├── schemas/         # Pydantic validation schemas
+│   │   ├── core/            # Auth, security, dependencies
+│   │   ├── config.py        # Environment configuration
+│   │   ├── database.py      # DB connection & session
+│   │   └── main.py          # FastAPI app entry point
+│   └── requirements.txt
+│
+└── screenshots/              # App screenshots
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|-----------|---------|
+| **React 18** | UI framework |
+| **TypeScript** | Type safety |
+| **Vite** | Build tool & dev server |
+| **Tailwind CSS** | Utility-first styling |
+| **shadcn/ui + Radix** | Accessible component library |
+| **React Router v6** | Client-side routing |
+| **TanStack Query** | Server state management |
+| **Axios** | HTTP client |
+| **Recharts** | Data visualization |
+| **React Hook Form + Zod** | Form handling & validation |
+
+### Backend
+| Technology | Purpose |
+|-----------|---------|
+| **FastAPI** | High-performance Python web framework |
+| **SQLAlchemy 2.0** | ORM & database toolkit |
+| **PostgreSQL** | Production database |
+| **Pydantic v2** | Data validation & serialization |
+| **JWT (python-jose)** | Token-based authentication |
+| **Passlib + bcrypt** | Password hashing |
+| **Alembic** | Database migrations |
+
+### Infrastructure
+| Service | Purpose |
+|---------|---------|
+| **Railway** | Hosting (frontend, backend, database) |
+| **PostgreSQL on Railway** | Managed database with persistent volume |
+
+---
+
+## 📊 Data Points
+
+| Metric | Value |
+|--------|-------|
+| API Endpoints | 25+ RESTful routes |
+| Database Models | 8 (User, Employee, Attendance, Task, Document, Announcement, LeaveRequest, Notification) |
+| Auth System | JWT with access + refresh tokens |
+| Role Types | 2 (HR Administrator, Employee) |
+| Leave Types | 4 (Sick, Vacation, Personal, Emergency) |
+| Task Priorities | 3 (Low, Medium, High) |
+| Task Statuses | 4 (Pending, In-Progress, Completed, Cancelled) |
+| Attendance Statuses | 4 (Present, Absent, Late, On Leave) |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js 18+
+- PostgreSQL (or use SQLite for local dev)
+
+### Backend
 
 ```bash
 cd backend
+python -m venv venv
+source venv/bin/activate        # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 python run.py
 ```
 
-Backend runs at: http://localhost:8000
+Server starts at `http://localhost:8000` — API docs at `http://localhost:8000/docs`
 
-### Frontend Setup
+### Frontend
 
 ```bash
 cd frontend
@@ -155,120 +245,58 @@ npm install
 npm run dev
 ```
 
-Frontend runs at: http://localhost:5173
-
----
-
-## � Key Features
-
-✅ **Authentication System**
-- Secure login/signup
-- JWT token-based authentication
-- Role-based access control (HR/Employee)
-
-✅ **HR Dashboard**
-- Real-time statistics
-- Employee management (CRUD operations)
-- Attendance tracking and marking
-- Recent activity feed
-
-✅ **Employee Dashboard**
-- Personal attendance tracking
-- Self-service check-in/check-out
-- Task management
-- Document uploads
-- Company announcements
-
-✅ **Fully Responsive**
-- Works on desktop, tablet, and mobile devices
-
----
-
-## 🗄️ Database
-
-**Production:** PostgreSQL on Render  
-**Development:** SQLite (local)
-
-The database includes:
-- Users and authentication
-- Employee profiles
-- Attendance records
-- Tasks and documents
-- Announcements
-
----
-
-## 📡 API Endpoints
-
-The backend provides RESTful APIs for:
-
-**Authentication:**
-- POST `/api/auth/login` - User login
-- POST `/api/auth/signup` - User registration
-- GET `/api/auth/me` - Get current user
-
-**HR Portal:**
-- GET `/api/hr/dashboard/stats` - Dashboard statistics
-- GET `/api/hr/employees` - List all employees
-- POST `/api/hr/employees` - Add new employee
-- PUT `/api/hr/employees/{id}` - Update employee
-- DELETE `/api/hr/employees/{id}` - Delete employee
-- GET `/api/hr/attendance` - View attendance records
-- POST `/api/hr/attendance/mark` - Mark attendance
-
-**Employee Portal:**
-- GET `/api/employee/dashboard` - Employee dashboard
-- POST `/api/employee/attendance/checkin` - Check in
-- POST `/api/employee/attendance/checkout` - Check out
-- GET `/api/employee/attendance` - View attendance history
-- GET `/api/employee/tasks` - View tasks
-- GET `/api/employee/documents` - View documents
-
-Full API documentation available at: https://staffsync-backend-w5dd.onrender.com/docs
+App starts at `http://localhost:5173`
 
 ---
 
 ## 🔒 Security
 
-- Passwords are hashed using bcrypt
-- JWT tokens for secure authentication
-- Protected API endpoints
-- CORS configured for frontend domain
-- Input validation on all endpoints
+- **Password Hashing** — bcrypt with salt rounds
+- **JWT Authentication** — Short-lived access tokens (30 min) + refresh tokens (7 days)
+- **Role-Based Access Control** — HR and Employee roles with route-level protection
+- **CORS** — Configured for specific allowed origins
+- **Input Validation** — Pydantic schemas validate all incoming data
+- **SQL Injection Protection** — SQLAlchemy ORM with parameterized queries
 
 ---
 
-## 📱 Screenshots
+## 📡 API Overview
 
-Visit the live application to see:
-- Modern, clean user interface
-- Responsive design
-- Intuitive navigation
-- Real-time data updates
+| Category | Endpoints | Description |
+|----------|-----------|-------------|
+| **Auth** | `POST /api/auth/login` · `POST /api/auth/signup` · `POST /api/auth/refresh` · `GET /api/auth/me` | Authentication & user management |
+| **HR Dashboard** | `GET /api/hr/dashboard/stats` · `GET /api/hr/analytics` | Real-time statistics & analytics |
+| **Employees** | `GET/POST/PUT/DELETE /api/hr/employees` | Full employee CRUD |
+| **Attendance** | `GET /api/hr/attendance` · `POST /api/hr/attendance/mark` | View & mark attendance |
+| **Leave Requests** | `GET /api/hr/leave-requests` · `PUT /api/hr/leave-requests/{id}/status` | Manage leave approvals |
+| **Employee Self-Service** | `POST /api/employee/attendance/checkin` · `POST /api/employee/attendance/checkout` | Punch in/out |
+| **Tasks** | `GET/POST/PUT /api/employee/tasks` | Task management |
+| **Documents** | `GET/POST /api/employee/documents` | Document uploads |
+| **Notifications** | `POST /api/hr/notifications` · `GET /api/employee/notifications` | Send & receive notifications |
+
+Full interactive documentation: [**Swagger UI →**](https://taskforge-production-5bfc.up.railway.app/docs)
 
 ---
 
-## 🛠️ Development
+## 🌐 Deployment
 
-The project follows best practices:
-- Clean code structure
-- Separation of concerns
-- RESTful API design
-- Component-based frontend architecture
-- Environment-based configuration
+Both services are deployed on **Railway** with automatic deploys from the repository:
+
+| Service | URL | Status |
+|---------|-----|--------|
+| Frontend | [intelligent-fulfillment-production-5ef7.up.railway.app](https://intelligent-fulfillment-production-5ef7.up.railway.app) | ● Online |
+| Backend API | [taskforge-production-5bfc.up.railway.app](https://taskforge-production-5bfc.up.railway.app) | ● Online |
+| PostgreSQL | Internal (Railway private network) | ● Online |
 
 ---
 
 ## 📝 License
 
-This project is open source and available for educational purposes.
+This project is open source and available for educational and portfolio purposes.
 
 ---
 
-## 👨‍💻 Author
-
-Developed as a full-stack HR management solution demonstrating modern web development practices.
-
----
-
-**StaffSync** - Simplifying HR Management
+<p align="center">
+  Built with ☕ and modern web technologies<br/>
+  <strong>TaskForge</strong> — Workforce management, simplified.
+</p>
