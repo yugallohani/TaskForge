@@ -20,7 +20,7 @@ import {
 } from "@/types/project";
 import { seedProjects, availableTeam } from "@/data/seedProjects";
 
-const STORAGE_KEY = "taskforge:projects:v1";
+const STORAGE_KEY = "taskforge:projects:v2";
 
 interface ProjectsContextValue {
   projects: Project[];

@@ -19,9 +19,9 @@ import {
 import { useSyncedState } from "@/lib/syncedState";
 import { seedSessions } from "@/data/seedSessions";
 
-const ACCESS_KEY = "taskforge:access:v1";
-const SESSIONS_KEY = "taskforge:sessions:v1";
-const NOTIFICATIONS_KEY = "taskforge:notifications:v1";
+const ACCESS_KEY = "taskforge:access:v2";
+const SESSIONS_KEY = "taskforge:sessions:v2";
+const NOTIFICATIONS_KEY = "taskforge:notifications:v2";
 
 interface CurrentUser {
   id: string;
