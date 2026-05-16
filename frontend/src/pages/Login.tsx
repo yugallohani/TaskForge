@@ -369,8 +369,8 @@ const Login = () => {
 
             {/* Subtle footer note */}
             <div className="mt-6 pt-4 border-t border-primary/10">
-              <p className="text-[11px] text-muted-foreground/70 text-center italic leading-relaxed">
-                Live metrics from your TaskForge workspace
+              <p className="text-[11px] text-muted-foreground/50 text-center italic leading-relaxed">
+                Currently powered by sample data and ambition. Real telemetry loading soon.
               </p>
             </div>
           </div>
