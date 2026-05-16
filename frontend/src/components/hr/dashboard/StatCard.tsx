@@ -27,7 +27,7 @@ export const StatCard = ({
   return (
     <div
       className={cn(
-        "tf-glass tf-glass-hover rounded-2xl p-5 group",
+        "dash-glass rounded-2xl p-5 group",
         className
       )}
       style={style}

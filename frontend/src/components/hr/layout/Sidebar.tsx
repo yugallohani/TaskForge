@@ -61,8 +61,8 @@ export const Sidebar = () => {
   };
 
   return (
-    <SidebarUI collapsible="icon" className="border-r border-border/50">
-      <SidebarHeader className="p-4 border-b border-border/50">
+    <SidebarUI collapsible="icon" className="border-r border-[hsl(168_50%_40%/0.06)] bg-[hsl(220_30%_5%/0.7)] backdrop-blur-xl">
+      <SidebarHeader className="p-4 border-b border-[hsl(168_50%_40%/0.06)]">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
             <Link
@@ -139,7 +139,7 @@ export const Sidebar = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="px-2 pb-4 border-t border-border/50">
+      <SidebarFooter className="px-2 pb-4 border-t border-[hsl(168_50%_40%/0.06)]">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Settings">

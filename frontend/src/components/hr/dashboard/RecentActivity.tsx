@@ -85,7 +85,7 @@ const getActivityIcon = (type: ActivityItem["type"]) => {
 
 export const RecentActivity = () => {
   return (
-    <div className="tf-glass rounded-2xl p-6 h-full flex flex-col">
+    <div className="dash-glass rounded-2xl p-6 h-full flex flex-col">
       <div className="mb-5 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">
           Recent Activity

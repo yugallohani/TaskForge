@@ -12,7 +12,7 @@ const maxTasks = Math.max(...contributors.map((c) => c.tasks));
 
 export const TeamLeaderboard = () => {
   return (
-    <div className="tf-glass rounded-2xl p-6">
+    <div className="dash-glass rounded-2xl p-6">
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">

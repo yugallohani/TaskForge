@@ -104,7 +104,7 @@ export const Header = ({ title, description }: HeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 backdrop-blur-xl px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between px-6 bg-[hsl(220_30%_6%/0.6)] backdrop-blur-2xl">
       <div>
         <h1 className="text-lg font-semibold text-foreground">{title}</h1>
         {description && (

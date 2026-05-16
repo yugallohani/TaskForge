@@ -20,7 +20,7 @@ const data = [
 
 export const ProductivityChart = () => {
   return (
-    <div className="tf-glass rounded-2xl p-6">
+    <div className="dash-glass rounded-2xl p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-foreground">

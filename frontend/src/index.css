@@ -866,3 +866,42 @@
     transition: background-color 0.4s ease, box-shadow 0.4s ease;
   }
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   TaskForge — Dashboard Glass (darker variant)
+   Deeper, more muted glass for data-heavy dashboard context.
+   Cards emerge from the dark background naturally instead of
+   sitting harshly on top.
+   ───────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .dash-glass {
+    position: relative;
+    background:
+      linear-gradient(
+        180deg,
+        hsl(220 30% 10% / 0.55) 0%,
+        hsl(220 30% 7% / 0.45) 100%
+      );
+    -webkit-backdrop-filter: blur(20px) saturate(130%);
+            backdrop-filter: blur(20px) saturate(130%);
+    border: 1px solid hsl(168 50% 40% / 0.08);
+    box-shadow:
+      0 4px 24px -8px hsl(220 40% 2% / 0.6),
+      0 0 0 1px hsl(220 30% 4% / 0.3),
+      inset 0 1px 0 hsl(168 50% 80% / 0.04);
+    transition:
+      border-color 0.4s ease,
+      box-shadow 0.4s ease,
+      background 0.4s ease;
+  }
+
+  .dash-glass:hover {
+    border-color: hsl(168 50% 45% / 0.18);
+    box-shadow:
+      0 8px 32px -8px hsl(220 40% 2% / 0.7),
+      0 0 28px -10px hsl(168 60% 40% / 0.15),
+      inset 0 1px 0 hsl(168 50% 80% / 0.06);
+  }
+}

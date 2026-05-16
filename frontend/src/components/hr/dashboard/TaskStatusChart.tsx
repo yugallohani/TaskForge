@@ -11,7 +11,7 @@ const total = data.reduce((sum, d) => sum + d.value, 0);
 
 export const TaskStatusChart = () => {
   return (
-    <div className="tf-glass rounded-2xl p-6 h-full flex flex-col">
+    <div className="dash-glass rounded-2xl p-6 h-full flex flex-col">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-foreground">Task Status</h3>
         <p className="text-sm text-muted-foreground">Distribution overview</p>
