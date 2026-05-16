@@ -5,8 +5,7 @@ import {
   CheckSquare,
   Users2,
   Timer,
-  BarChart3,
-  Activity,
+  Brain,
   ShieldCheck,
   Settings,
   ChevronLeft,
@@ -32,14 +31,13 @@ import { useToast } from "@/hooks/use-toast";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
 
 const mainNavItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: ROUTES.HR.DASHBOARD },
-  { icon: FolderKanban, label: "Projects", path: ROUTES.HR.PROJECTS },
-  { icon: CheckSquare, label: "Tasks", path: ROUTES.HR.TASKS },
-  { icon: ShieldCheck, label: "Access Requests", path: "/hr/access-requests" },
-  { icon: Users2, label: "Team Members", path: ROUTES.HR.EMPLOYEES },
-  { icon: Timer, label: "Work Sessions", path: ROUTES.HR.ATTENDANCE },
-  { icon: BarChart3, label: "Analytics", path: ROUTES.HR.DASHBOARD, comingSoon: true },
-  { icon: Activity, label: "Activity Logs", path: ROUTES.HR.DASHBOARD, comingSoon: true },
+  { icon: LayoutDashboard, label: "Dashboard", path: ROUTES.HR.DASHBOARD, group: "workspace" },
+  { icon: FolderKanban, label: "Projects", path: ROUTES.HR.PROJECTS, group: "workspace" },
+  { icon: CheckSquare, label: "Tasks", path: ROUTES.HR.TASKS, group: "workspace" },
+  { icon: ShieldCheck, label: "Access Requests", path: "/hr/access-requests", group: "management" },
+  { icon: Users2, label: "Team Members", path: ROUTES.HR.EMPLOYEES, group: "management" },
+  { icon: Timer, label: "Work Sessions", path: ROUTES.HR.ATTENDANCE, group: "management" },
+  { icon: Brain, label: "AI Insights", path: "/hr/ai-insights", group: "intelligence" },
 ];
 
 export const Sidebar = () => {
@@ -59,6 +57,7 @@ export const Sidebar = () => {
     if (label === "Access Requests") return location.pathname === "/hr/access-requests";
     if (label === "Team Members") return location.pathname === ROUTES.HR.EMPLOYEES;
     if (label === "Work Sessions") return location.pathname === ROUTES.HR.ATTENDANCE;
+    if (label === "AI Insights") return location.pathname === "/hr/ai-insights";
     return location.pathname === path;
   };
 
@@ -106,50 +105,122 @@ export const Sidebar = () => {
               isCollapsed && "sr-only"
             )}
           >
-            Main Menu
+            Workspace
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainNavItems.map((item) => (
+              {mainNavItems.filter((i) => i.group === "workspace").map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  {item.comingSoon ? (
-                    <SidebarMenuButton
-                      isActive={false}
-                      tooltip={item.label}
-                      onClick={() => handleComingSoon(item.label)}
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive(item.path, item.label)}
+                    tooltip={item.label}
+                  >
+                    <NavLink
+                      to={item.path}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+                        isActive(item.path, item.label)
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {!isCollapsed && (
+                        <>
+                          <span>{item.label}</span>
+                          {item.label === "Access Requests" && pendingRequests > 0 && (
+                            <span className="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                              {pendingRequests}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel
+            className={cn(
+              "text-xs text-muted-foreground",
+              isCollapsed && "sr-only"
+            )}
+          >
+            Management
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {mainNavItems.filter((i) => i.group === "management").map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive(item.path, item.label)}
+                    tooltip={item.label}
+                  >
+                    <NavLink
+                      to={item.path}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+                        isActive(item.path, item.label)
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      {!isCollapsed && (
+                        <>
+                          <span>{item.label}</span>
+                          {item.label === "Access Requests" && pendingRequests > 0 && (
+                            <span className="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+                              {pendingRequests}
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel
+            className={cn(
+              "text-xs text-muted-foreground",
+              isCollapsed && "sr-only"
+            )}
+          >
+            Intelligence
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {mainNavItems.filter((i) => i.group === "intelligence").map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={isActive(item.path, item.label)}
+                    tooltip={item.label}
+                  >
+                    <NavLink
+                      to={item.path}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+                        isActive(item.path, item.label)
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      )}
                     >
                       <item.icon className="h-5 w-5" />
                       {!isCollapsed && <span>{item.label}</span>}
-                    </SidebarMenuButton>
-                  ) : (
-                    <SidebarMenuButton
-                      asChild
-                      isActive={isActive(item.path, item.label)}
-                      tooltip={item.label}
-                    >
-                      <NavLink
-                        to={item.path}
-                        className={cn(
-                          "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-                          isActive(item.path, item.label)
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                        )}
-                      >
-                        <item.icon className="h-5 w-5" />
-                        {!isCollapsed && (
-                          <>
-                            <span>{item.label}</span>
-                            {item.label === "Access Requests" && pendingRequests > 0 && (
-                              <span className="ml-auto inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
-                                {pendingRequests}
-                              </span>
-                            )}
-                          </>
-                        )}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  )}
+                    </NavLink>
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

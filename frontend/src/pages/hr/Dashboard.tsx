@@ -13,8 +13,6 @@ import { ProductivityChart } from "@/components/hr/dashboard/ProductivityChart";
 import { TaskStatusChart } from "@/components/hr/dashboard/TaskStatusChart";
 import { ActiveProjects } from "@/components/hr/dashboard/ActiveProjects";
 import { RecentActivity } from "@/components/hr/dashboard/RecentActivity";
-import { TeamLeaderboard } from "@/components/hr/dashboard/TeamLeaderboard";
-import { AIInsights } from "@/components/hr/dashboard/AIInsights";
 
 const AdminDashboard = () => {
   const stats = [
@@ -92,19 +90,13 @@ const AdminDashboard = () => {
       </div>
 
       {/* Projects + Activity */}
-      <div className="grid gap-6 lg:grid-cols-3 mb-8">
+      <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <ActiveProjects />
         </div>
         <div>
           <RecentActivity />
         </div>
-      </div>
-
-      {/* Team Leaderboard + AI Insights */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <TeamLeaderboard />
-        <AIInsights />
       </div>
     </MainLayout>
   );

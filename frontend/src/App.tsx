@@ -28,6 +28,7 @@ const HRAttendance = lazy(() => import("./pages/hr/Attendance"));
 const HRLeaveRequests = lazy(() => import("./pages/hr/LeaveRequests"));
 const HRSettings = lazy(() => import("./pages/hr/Settings"));
 const HRAccessRequests = lazy(() => import("./pages/hr/AccessRequests"));
+const HRAIInsights = lazy(() => import("./pages/hr/AIInsights"));
 
 // Member Dashboard Pages
 const MemberDashboard = lazy(() => import("./pages/member/Dashboard"));
@@ -80,6 +81,7 @@ const App = () => (
                   <Route path="employees" element={<HREmployees />} />
                   <Route path="attendance" element={<HRAttendance />} />
                   <Route path="access-requests" element={<HRAccessRequests />} />
+                  <Route path="ai-insights" element={<HRAIInsights />} />
                   <Route path="leave-requests" element={<HRLeaveRequests />} />
                   <Route path="settings" element={<HRSettings />} />
                 </Route>
