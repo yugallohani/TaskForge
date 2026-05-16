@@ -69,10 +69,10 @@ const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className={`group glass card-glow-hover rounded-2xl p-6 card-float-${(index % 6) + 1}`}
+              className={`group tf-glass tf-glass-hover rounded-2xl p-6 card-float-${(index % 6) + 1}`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+              <div className="tf-icon-illum w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                 <feature.icon className="w-6 h-6 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2 text-foreground group-hover:text-primary transition-colors duration-300">

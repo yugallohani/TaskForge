@@ -53,7 +53,7 @@ const HeroSection = () => {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <div className="glass rounded-lg px-4 py-2 text-xs">
+              <div className="tf-glass tf-glass-hover rounded-lg px-4 py-2 text-xs">
                 <p className="text-muted-foreground mb-1">Demo Credentials:</p>
                 <p className="text-foreground">
                   <code className="text-primary">{DEMO_CREDENTIALS.HR.email}</code>
@@ -71,7 +71,7 @@ const HeroSection = () => {
                   Member Login
                 </Button>
               </Link>
-              <div className="glass rounded-lg px-4 py-2 text-xs max-w-[200px]">
+              <div className="tf-glass tf-glass-hover rounded-lg px-4 py-2 text-xs max-w-[200px]">
                 <p className="text-muted-foreground text-center">
                   Create an account to join your team workspace
                 </p>
@@ -88,11 +88,11 @@ const HeroSection = () => {
             ].map((feature, index) => (
               <div
                 key={feature.label}
-                className={`glass glass-hover card-hover-lift rounded-xl p-5 scale-in card-float-${index + 1}`}
+                className={`tf-glass tf-glass-hover rounded-xl p-5 scale-in card-float-${index + 1}`}
                 style={{ animationDelay: `${0.6 + index * 0.1}s` }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="tf-icon-illum w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <feature.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div className="text-left">

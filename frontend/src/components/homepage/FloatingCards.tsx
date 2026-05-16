@@ -5,10 +5,14 @@ import { CheckCircle2, Users2, Activity, Sparkles } from "lucide-react";
  * -------------
  * Mac-style glassmorphism mini widgets that softly drift around the
  * hero section to add depth and life. Hidden on small viewports to
- * keep mobile clean. Pointer-events disabled so they never intercept
- * clicks on real CTAs.
+ * keep mobile clean. Pointer-events disabled at the wrapper so they
+ * never intercept clicks on real CTAs, but re-enabled on the inner
+ * card so visionOS-style hover lift + teal glow still works.
  */
 const FloatingCards = () => {
+  const baseCard =
+    "tf-glass tf-glass-hover pointer-events-auto rounded-xl px-4 py-3";
+
   return (
     <>
       {/* Top-left — Task Completed */}
@@ -16,10 +20,10 @@ const FloatingCards = () => {
         className="hidden lg:flex absolute top-24 left-[6%] z-0 pointer-events-none animate-tf-float-card"
         style={{ animationDelay: "0s" }}
       >
-        <div className="glass rounded-xl px-4 py-3 shadow-2xl shadow-black/40 border border-primary/15 backdrop-blur-xl">
+        <div className={baseCard}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-[hsl(175_84%_38%)] flex items-center justify-center shadow-lg shadow-primary/30">
-              <CheckCircle2 className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
+            <div className="tf-icon-illum w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4 text-primary" strokeWidth={2.5} />
             </div>
             <div className="text-left">
               <p className="text-xs font-semibold text-foreground">Task Completed</p>
@@ -34,10 +38,10 @@ const FloatingCards = () => {
         className="hidden lg:flex absolute top-32 right-[6%] z-0 pointer-events-none animate-tf-float-card"
         style={{ animationDelay: "1.5s" }}
       >
-        <div className="glass rounded-xl px-4 py-3 shadow-2xl shadow-black/40 border border-primary/15 backdrop-blur-xl">
+        <div className={baseCard}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[hsl(188_90%_50%)] to-[hsl(168_76%_42%)] flex items-center justify-center shadow-lg shadow-primary/30">
-              <Activity className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
+            <div className="tf-icon-illum w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center">
+              <Activity className="w-4 h-4 text-primary" strokeWidth={2.5} />
             </div>
             <div className="text-left">
               <p className="text-xs font-semibold text-foreground">Project Synced</p>
@@ -52,10 +56,10 @@ const FloatingCards = () => {
         className="hidden md:flex absolute bottom-24 left-[4%] z-0 pointer-events-none animate-tf-float-card"
         style={{ animationDelay: "3s" }}
       >
-        <div className="glass rounded-xl px-4 py-3 shadow-2xl shadow-black/40 border border-primary/15 backdrop-blur-xl">
+        <div className={baseCard}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[hsl(160_70%_40%)] to-[hsl(168_76%_45%)] flex items-center justify-center shadow-lg shadow-primary/30">
-              <Users2 className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
+            <div className="tf-icon-illum w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center">
+              <Users2 className="w-4 h-4 text-primary" strokeWidth={2.5} />
             </div>
             <div className="text-left">
               <p className="text-xs font-semibold text-foreground">Team Updated</p>
@@ -70,10 +74,10 @@ const FloatingCards = () => {
         className="hidden md:flex absolute bottom-28 right-[5%] z-0 pointer-events-none animate-tf-float-card"
         style={{ animationDelay: "2s" }}
       >
-        <div className="glass rounded-xl px-4 py-3 shadow-2xl shadow-black/40 border border-primary/15 backdrop-blur-xl">
+        <div className={baseCard}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-[hsl(188_90%_50%)] flex items-center justify-center shadow-lg shadow-primary/30">
-              <Sparkles className="w-4 h-4 text-primary-foreground" strokeWidth={2.5} />
+            <div className="tf-icon-illum w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-primary" strokeWidth={2.5} />
             </div>
             <div className="text-left">
               <p className="text-xs font-semibold text-foreground">12 Tasks Done</p>
