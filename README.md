@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://intelligent-fulfillment-production-5ef7.up.railway.app">🌐 Live Demo</a> &nbsp;·&nbsp;
+  <a href="https://taskforge-web.up.railway.app">🌐 Live Demo</a> &nbsp;·&nbsp;
   <a href="https://taskforge-production-5bfc.up.railway.app/docs">📖 API Docs</a> &nbsp;·&nbsp;
   <a href="#-quick-start">🚀 Quick Start</a>
 </p>
@@ -271,7 +271,7 @@ Both services are deployed on **Railway** with automatic deploys:
 
 | Service | URL | Status |
 |---------|-----|--------|
-| Frontend | [intelligent-fulfillment-production-5ef7.up.railway.app](https://intelligent-fulfillment-production-5ef7.up.railway.app) | ● Online |
+| Frontend | [taskforge-web.up.railway.app](https://taskforge-web.up.railway.app) | ● Online |
 | Backend API | [taskforge-production-5bfc.up.railway.app](https://taskforge-production-5bfc.up.railway.app) | ● Online |
 | PostgreSQL | Internal (Railway private network) | ● Online |
 
