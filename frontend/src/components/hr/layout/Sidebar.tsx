@@ -1,9 +1,12 @@
 import { NavLink, useLocation, Link } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Users, 
-  CalendarCheck,
-  Calendar,
+import {
+  LayoutDashboard,
+  FolderKanban,
+  CheckSquare,
+  Users2,
+  Timer,
+  BarChart3,
+  Activity,
   Settings,
   ChevronLeft,
 } from "lucide-react";
@@ -28,9 +31,12 @@ import { useToast } from "@/hooks/use-toast";
 
 const mainNavItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: ROUTES.HR.DASHBOARD },
-  { icon: Users, label: "Employees", path: ROUTES.HR.EMPLOYEES },
-  { icon: CalendarCheck, label: "Attendance", path: ROUTES.HR.ATTENDANCE },
-  { icon: Calendar, label: "Leave Requests", path: ROUTES.HR.LEAVE_REQUESTS },
+  { icon: FolderKanban, label: "Projects", path: ROUTES.HR.EMPLOYEES, comingSoon: true },
+  { icon: CheckSquare, label: "Tasks", path: ROUTES.HR.ATTENDANCE, comingSoon: true },
+  { icon: Users2, label: "Team Members", path: ROUTES.HR.EMPLOYEES },
+  { icon: Timer, label: "Work Sessions", path: ROUTES.HR.ATTENDANCE },
+  { icon: BarChart3, label: "Analytics", path: ROUTES.HR.DASHBOARD, comingSoon: true },
+  { icon: Activity, label: "Activity Logs", path: ROUTES.HR.DASHBOARD, comingSoon: true },
 ];
 
 export const Sidebar = () => {
@@ -39,12 +45,18 @@ export const Sidebar = () => {
   const { toast } = useToast();
   const isCollapsed = state === "collapsed";
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string, label: string) => {
+    // More specific matching for items that share paths
+    if (label === "Dashboard") return location.pathname === ROUTES.HR.DASHBOARD;
+    if (label === "Team Members") return location.pathname === ROUTES.HR.EMPLOYEES;
+    if (label === "Work Sessions") return location.pathname === ROUTES.HR.ATTENDANCE;
+    return location.pathname === path;
+  };
 
-  const handleComingSoon = () => {
+  const handleComingSoon = (label: string) => {
     toast({
       title: "Coming Soon",
-      description: "Settings functionality will be added in a future update",
+      description: `${label} will be available in a future update.`,
     });
   };
 
@@ -53,8 +65,8 @@ export const Sidebar = () => {
       <SidebarHeader className="p-4 border-b border-border/50">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <Link 
-              to={ROUTES.HOME} 
+            <Link
+              to={ROUTES.HOME}
               className="transition-opacity hover:opacity-80"
               title="Go to Homepage"
             >
@@ -67,38 +79,59 @@ export const Sidebar = () => {
             onClick={toggleSidebar}
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <ChevronLeft className={cn("h-4 w-4 transition-transform", isCollapsed && "rotate-180")} />
+            <ChevronLeft
+              className={cn(
+                "h-4 w-4 transition-transform",
+                isCollapsed && "rotate-180"
+              )}
+            />
           </Button>
         </div>
       </SidebarHeader>
 
       <SidebarContent className="px-2">
         <SidebarGroup>
-          <SidebarGroupLabel className={cn("text-xs text-muted-foreground", isCollapsed && "sr-only")}>
+          <SidebarGroupLabel
+            className={cn(
+              "text-xs text-muted-foreground",
+              isCollapsed && "sr-only"
+            )}
+          >
             Main Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainNavItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.path)}
-                    tooltip={item.label}
-                  >
-                    <NavLink
-                      to={item.path}
-                      className={cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
-                        isActive(item.path)
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                      )}
+                <SidebarMenuItem key={item.label}>
+                  {item.comingSoon ? (
+                    <SidebarMenuButton
+                      isActive={false}
+                      tooltip={item.label}
+                      onClick={() => handleComingSoon(item.label)}
                     >
                       <item.icon className="h-5 w-5" />
                       {!isCollapsed && <span>{item.label}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
+                    </SidebarMenuButton>
+                  ) : (
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive(item.path, item.label)}
+                      tooltip={item.label}
+                    >
+                      <NavLink
+                        to={item.path}
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 transition-colors",
+                          isActive(item.path, item.label)
+                            ? "bg-primary/10 text-primary"
+                            : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        )}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        {!isCollapsed && <span>{item.label}</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -111,7 +144,7 @@ export const Sidebar = () => {
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Settings">
               <button
-                onClick={handleComingSoon}
+                onClick={() => handleComingSoon("Settings")}
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors w-full"
               >
                 <Settings className="h-5 w-5" />

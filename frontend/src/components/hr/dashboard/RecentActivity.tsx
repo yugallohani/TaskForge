@@ -1,160 +1,132 @@
-import { useState, useEffect } from "react";
-import { Clock, UserPlus, LogIn, LogOut, Calendar, RefreshCw } from "lucide-react";
+import {
+  CheckCircle2,
+  ArrowRight,
+  FolderPlus,
+  UserPlus,
+  AlertTriangle,
+  RefreshCw,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import { hrAPI } from "@/lib/api";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 
-interface Activity {
+interface ActivityItem {
   id: string;
-  type: string;
+  type: "completed" | "moved" | "created" | "assigned" | "overdue";
   message: string;
   time: string;
-  timestamp: string;
-  employee_name?: string;
-  clock_time?: string;
-  leave_type?: string;
-  date_range?: string;
+  user: string;
 }
 
-export const RecentActivity = () => {
-  const { toast } = useToast();
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isRefreshing, setIsRefreshing] = useState(false);
+const activities: ActivityItem[] = [
+  {
+    id: "1",
+    type: "completed",
+    message: 'completed "Image Eval #221"',
+    time: "2 min ago",
+    user: "Priya",
+  },
+  {
+    id: "2",
+    type: "moved",
+    message: "moved task to Review",
+    time: "8 min ago",
+    user: "Rahul",
+  },
+  {
+    id: "3",
+    type: "created",
+    message: 'created project "Safety QA"',
+    time: "15 min ago",
+    user: "Admin",
+  },
+  {
+    id: "4",
+    type: "assigned",
+    message: "assigned 12 tasks to team",
+    time: "32 min ago",
+    user: "Admin",
+  },
+  {
+    id: "5",
+    type: "overdue",
+    message: '"RLHF Batch #14" is overdue',
+    time: "1 hour ago",
+    user: "System",
+  },
+  {
+    id: "6",
+    type: "completed",
+    message: 'completed "Prompt Audit #89"',
+    time: "2 hours ago",
+    user: "Amit",
+  },
+  {
+    id: "7",
+    type: "moved",
+    message: "moved 3 tasks to Done",
+    time: "3 hours ago",
+    user: "Sneha",
+  },
+];
 
-  useEffect(() => {
-    fetchActivities();
-    
-    // Auto-refresh every 30 seconds
-    const interval = setInterval(() => {
-      fetchActivities(true);
-    }, 30000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const fetchActivities = async (silent = false) => {
-    try {
-      if (!silent) {
-        setIsLoading(true);
-      } else {
-        setIsRefreshing(true);
-      }
-      
-      const response = await hrAPI.getRecentActivity({ limit: 10 });
-      setActivities(response.data.activities || []);
-    } catch (error) {
-      console.error("Failed to fetch activities:", error);
-      if (!silent) {
-        toast({
-          title: "Error loading activities",
-          description: "Failed to fetch recent activity. Please try again.",
-          variant: "destructive",
-        });
-      }
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  };
-
-  const handleRefresh = () => {
-    fetchActivities();
-  };
-
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case "employee_created":
-        return {
-          icon: UserPlus,
-          iconColor: "text-success",
-          iconBg: "bg-success/10",
-        };
-      case "clock_in":
-        return {
-          icon: LogIn,
-          iconColor: "text-primary",
-          iconBg: "bg-primary/10",
-        };
-      case "clock_out":
-        return {
-          icon: LogOut,
-          iconColor: "text-blue-500",
-          iconBg: "bg-blue-500/10",
-        };
-      case "leave_request":
-        return {
-          icon: Calendar,
-          iconColor: "text-warning",
-          iconBg: "bg-warning/10",
-        };
-      default:
-        return {
-          icon: Clock,
-          iconColor: "text-muted-foreground",
-          iconBg: "bg-muted",
-        };
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="glass-card p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
-          <Clock className="h-5 w-5 text-muted-foreground" />
-        </div>
-        <div className="text-center py-8 text-muted-foreground">
-          Loading activities...
-        </div>
-      </div>
-    );
+const getActivityIcon = (type: ActivityItem["type"]) => {
+  switch (type) {
+    case "completed":
+      return { icon: CheckCircle2, color: "text-primary", bg: "bg-primary/10" };
+    case "moved":
+      return { icon: ArrowRight, color: "text-[hsl(188_90%_55%)]", bg: "bg-[hsl(188_90%_55%/0.1)]" };
+    case "created":
+      return { icon: FolderPlus, color: "text-[hsl(260_70%_65%)]", bg: "bg-[hsl(260_70%_65%/0.1)]" };
+    case "assigned":
+      return { icon: UserPlus, color: "text-primary", bg: "bg-primary/10" };
+    case "overdue":
+      return { icon: AlertTriangle, color: "text-warning", bg: "bg-warning/10" };
   }
+};
 
+export const RecentActivity = () => {
   return (
-    <div className="glass-card p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleRefresh}
-          disabled={isLoading || isRefreshing}
-          className="h-8 w-8 p-0"
-        >
-          <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
-        </Button>
+    <div className="tf-glass rounded-2xl p-6 h-full flex flex-col">
+      <div className="mb-5 flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-foreground">
+          Recent Activity
+        </h3>
+        <button className="h-7 w-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+          <RefreshCw className="h-3.5 w-3.5" />
+        </button>
       </div>
-      
-      {activities.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p>No recent activity</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {activities.map((activity, index) => {
-            const { icon: Icon, iconColor, iconBg } = getActivityIcon(activity.type);
-            
-            return (
+
+      <div className="space-y-3 flex-1 overflow-y-auto pr-1">
+        {activities.map((activity, index) => {
+          const { icon: Icon, color, bg } = getActivityIcon(activity.type);
+          return (
+            <div
+              key={activity.id}
+              className="flex items-start gap-3 animate-fade-in"
+              style={{ animationDelay: `${index * 60}ms` }}
+            >
               <div
-                key={activity.id}
-                className="flex items-start gap-4 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className={cn(
+                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
+                  bg
+                )}
               >
-                <div className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", iconBg)}>
-                  <Icon className={cn("h-4 w-4", iconColor)} />
-                </div>
-                <div className="flex-1 space-y-1">
-                  <p className="text-sm text-foreground">{activity.message}</p>
-                  <p className="text-xs text-muted-foreground">{activity.time}</p>
-                </div>
+                <Icon className={cn("h-3.5 w-3.5", color)} />
               </div>
-            );
-          })}
-        </div>
-      )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-foreground leading-snug">
+                  <span className="font-medium">{activity.user}</span>{" "}
+                  <span className="text-muted-foreground">
+                    {activity.message}
+                  </span>
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {activity.time}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
