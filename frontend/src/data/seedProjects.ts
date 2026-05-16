@@ -123,12 +123,8 @@ const isoOffset = (days: number) => {
 };
 
 /**
- * Initial projects — only the two operational pipelines:
- *   • Evals
- *   • Generalists
- *
- * These are realistic AI workflow examples. The admin can add more
- * projects to either column from the Create Project dialog.
+ * Initial projects — one per category to keep it simple.
+ * Admin can create more from the UI.
  */
 export const seedProjects: Project[] = [
   // ─── EVALS ───
@@ -275,292 +271,87 @@ export const seedProjects: Project[] = [
     createdAt: isoOffset(-14),
     expectedSubmissions: 8,
   },
-  {
-    id: "proj_safety",
-    name: "Safety Evaluation",
-    category: "eval",
-    description:
-      "Classify model responses for safety violations across harm categories: hate, self-harm, violence, sexual content, and PII leakage.",
-    instructions:
-      "Read prompt + response carefully. Pick the most severe applicable category. If safe, mark as 'no violation'.",
-    deadline: isoOffset(4),
-    priority: "high",
-    status: "active",
-    progress: 58,
-    members: [
-      m("u2", 14, 30, "in_progress"),
-      m("u4", 18, 30, "submitted"),
-      m("u6", 12, 30, "in_progress"),
-      m("u8", 22, 30, "submitted"),
-    ],
-    submissions: [
-      {
-        id: "sub_safety_1",
-        memberId: "u4",
-        memberName: "Sneha Gupta",
-        memberAvatar: "SG",
-        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-        status: "approved",
-        itemsCount: 30,
-      },
-      {
-        id: "sub_safety_2",
-        memberId: "u8",
-        memberName: "Divya Joshi",
-        memberAvatar: "DJ",
-        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-        status: "pending",
-        itemsCount: 30,
-      },
-    ],
-    issues: [],
-    activity: [
-      {
-        id: "act_s1",
-        type: "submission_uploaded",
-        actor: "Divya Joshi",
-        actorAvatar: "DJ",
-        description: "uploaded a submission (30 items)",
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-      },
-    ],
-    createdAt: isoOffset(-10),
-    expectedSubmissions: 4,
-  },
-  {
-    id: "proj_image_rank",
-    name: "Image Ranking",
-    category: "eval",
-    description:
-      "Rank 4 candidate image generations from best to worst given a prompt. Used for RLHF training signal.",
-    instructions:
-      "Drag images into preference order. Highest-quality on top. Provide a brief rationale per ranking.",
-    deadline: isoOffset(10),
-    priority: "medium",
-    status: "active",
-    progress: 35,
-    members: [
-      m("u1", 6, 20, "in_progress"),
-      m("u3", 4, 20, "in_progress"),
-      m("u7", 10, 20, "in_progress"),
-    ],
-    submissions: [],
-    issues: [],
-    activity: [
-      {
-        id: "act_ir1",
-        type: "project_created",
-        actor: "Admin",
-        actorAvatar: "AD",
-        description: 'created project "Image Ranking"',
-        timestamp: isoOffset(-3),
-      },
-    ],
-    createdAt: isoOffset(-3),
-    expectedSubmissions: 3,
-  },
-  {
-    id: "proj_pr_score",
-    name: "Prompt-Response Scoring",
-    category: "eval",
-    description:
-      "Score model responses on a 1-5 Likert scale across 4 axes: helpfulness, accuracy, tone, and instruction-following.",
-    instructions:
-      "Use the rubric provided. Document edge cases in the comment field.",
-    deadline: isoOffset(14),
-    priority: "medium",
-    status: "active",
-    progress: 12,
-    members: [
-      m("u2", 2, 40, "in_progress"),
-      m("u6", 3, 40, "in_progress"),
-    ],
-    submissions: [],
-    issues: [],
-    activity: [
-      {
-        id: "act_pr1",
-        type: "project_created",
-        actor: "Admin",
-        actorAvatar: "AD",
-        description: 'created project "Prompt-Response Scoring"',
-        timestamp: isoOffset(-1),
-      },
-    ],
-    createdAt: isoOffset(-1),
-    expectedSubmissions: 2,
-  },
-  {
-    id: "proj_rlhf",
-    name: "RLHF Review",
-    category: "eval",
-    description:
-      "Review and validate human preference rankings collected for reinforcement learning from human feedback.",
-    instructions:
-      "Audit ranked pairs for consistency. Flag suspicious patterns.",
-    deadline: isoOffset(5),
-    priority: "high",
-    status: "active",
-    progress: 88,
-    members: [
-      m("u2", 28, 32, "submitted"),
-      m("u4", 30, 32, "submitted"),
-      m("u8", 32, 32, "submitted"),
-    ],
-    submissions: [
-      {
-        id: "sub_rlhf_1",
-        memberId: "u8",
-        memberName: "Divya Joshi",
-        memberAvatar: "DJ",
-        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 18).toISOString(),
-        status: "approved",
-        itemsCount: 32,
-      },
-    ],
-    issues: [],
-    activity: [],
-    createdAt: isoOffset(-9),
-    expectedSubmissions: 3,
-  },
 
   // ─── GENERALISTS ───
   {
-    id: "proj_gen_qa",
-    name: "General QA",
+    id: "proj_mask_milo",
+    name: "Mask Milo",
     category: "generalist",
     description:
-      "Open-domain question answering quality review. Verify factuality and completeness of responses.",
+      "Multi-domain annotation and labeling pipeline for the Milo dataset. Covers text classification, entity masking, and PII redaction tasks.",
     instructions:
-      "For each Q&A pair, mark correctness, completeness, and clarity. Cite sources where relevant.",
-    deadline: isoOffset(8),
+      "Follow the labeling guide for each task type. Apply entity masks accurately. Flag ambiguous cases in the comments field.",
+    deadline: isoOffset(10),
     priority: "medium",
     status: "active",
-    progress: 64,
+    progress: 48,
     members: [
-      m("u3", 16, 25, "in_progress"),
-      m("u5", 20, 25, "submitted"),
-      m("u7", 14, 25, "in_progress"),
+      m("u3", 10, 20, "in_progress"),
+      m("u5", 12, 20, "submitted"),
+      m("u7", 8, 20, "in_progress"),
+      m("u4", 15, 20, "submitted"),
     ],
     submissions: [
       {
-        id: "sub_gqa_1",
+        id: "sub_mm_1",
         memberId: "u5",
         memberName: "Vikram Singh",
         memberAvatar: "VS",
-        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 10).toISOString(),
+        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
         status: "approved",
-        itemsCount: 25,
+        itemsCount: 20,
+      },
+      {
+        id: "sub_mm_2",
+        memberId: "u4",
+        memberName: "Sneha Gupta",
+        memberAvatar: "SG",
+        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+        status: "pending",
+        itemsCount: 20,
       },
     ],
     issues: [
       {
-        id: "iss_gqa_1",
-        title: "Need more examples for ambiguous questions",
+        id: "iss_mm_1",
+        title: "Need clarification on PII categories",
         description:
-          "Some questions have multiple valid interpretations. Could we get a guidance doc?",
+          "The guide mentions 'sensitive PII' but doesn't list which categories qualify. Can we get an updated doc?",
         reportedBy: "Karan Mehta",
         reportedByAvatar: "KM",
-        reportedAt: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString(),
-        priority: "low",
+        reportedAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+        priority: "medium",
         status: "open",
         replies: [],
       },
     ],
-    activity: [],
-    createdAt: isoOffset(-12),
-    expectedSubmissions: 3,
-  },
-  {
-    id: "proj_research",
-    name: "Research Tasks",
-    category: "generalist",
-    description:
-      "Curated research and information-gathering assignments for the AI knowledge base.",
-    instructions:
-      "Each task includes a topic and source list. Summarize findings in 200 words. Cite sources.",
-    deadline: isoOffset(12),
-    priority: "low",
-    status: "active",
-    progress: 42,
-    members: [m("u6", 8, 20, "in_progress"), m("u3", 5, 20, "in_progress")],
-    submissions: [],
-    issues: [],
-    activity: [],
-    createdAt: isoOffset(-7),
-    expectedSubmissions: 2,
-  },
-  {
-    id: "proj_data_val",
-    name: "Data Validation",
-    category: "generalist",
-    description:
-      "QA pass on incoming training data shards. Flag corrupt rows and label inconsistencies.",
-    instructions:
-      "Run the validation checklist on each shard. Submit a per-shard report.",
-    deadline: isoOffset(3),
-    priority: "high",
-    status: "active",
-    progress: 78,
-    members: [
-      m("u4", 14, 18, "submitted"),
-      m("u8", 16, 18, "submitted"),
-    ],
-    submissions: [
+    activity: [
       {
-        id: "sub_dv_1",
-        memberId: "u4",
-        memberName: "Sneha Gupta",
-        memberAvatar: "SG",
-        submittedAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-        status: "pending",
-        itemsCount: 18,
+        id: "act_mm_1",
+        type: "submission_uploaded",
+        actor: "Sneha Gupta",
+        actorAvatar: "SG",
+        description: "uploaded a submission (20 items)",
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+      },
+      {
+        id: "act_mm_2",
+        type: "submission_approved",
+        actor: "Admin",
+        actorAvatar: "AD",
+        description: "approved Vikram Singh's submission",
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+      },
+      {
+        id: "act_mm_3",
+        type: "project_created",
+        actor: "Admin",
+        actorAvatar: "AD",
+        description: 'created project "Mask Milo"',
+        timestamp: isoOffset(-8),
       },
     ],
-    issues: [],
-    activity: [],
-    createdAt: isoOffset(-6),
-    expectedSubmissions: 2,
-  },
-  {
-    id: "proj_content",
-    name: "Content Review",
-    category: "generalist",
-    description:
-      "Review user-submitted content for the help center. Edit for clarity, accuracy, and tone.",
-    instructions:
-      "Apply the style guide. Track edits with comments. Send to peer review when done.",
-    deadline: isoOffset(15),
-    priority: "low",
-    status: "active",
-    progress: 22,
-    members: [m("u1", 4, 18, "in_progress")],
-    submissions: [],
-    issues: [],
-    activity: [],
-    createdAt: isoOffset(-2),
-    expectedSubmissions: 1,
-  },
-  {
-    id: "proj_misc",
-    name: "Misc Operations",
-    category: "generalist",
-    description:
-      "Catch-all for ad-hoc operational tasks: tagging, formatting, data cleanup, etc.",
-    instructions: "Refer to the per-task instructions in the workspace.",
-    deadline: isoOffset(20),
-    priority: "low",
-    status: "active",
-    progress: 50,
-    members: [
-      m("u3", 5, 10, "in_progress"),
-      m("u5", 5, 10, "in_progress"),
-      m("u7", 5, 10, "in_progress"),
-    ],
-    submissions: [],
-    issues: [],
-    activity: [],
-    createdAt: isoOffset(-5),
-    expectedSubmissions: 3,
+    createdAt: isoOffset(-8),
+    expectedSubmissions: 4,
   },
 ];
