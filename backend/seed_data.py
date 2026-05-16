@@ -101,17 +101,17 @@ def create_hr_admin(db):
     print("\n👤 Creating HR Administrator...")
     
     # Check if HR admin already exists
-    existing = db.query(User).filter(User.email == "hr@staffsync.com").first()
+    existing = db.query(User).filter(User.email == "admin@taskforge.com").first()
     if existing:
         print("⚠️  HR admin already exists, skipping...")
         return existing
     
     hr_user = User(
-        email="hr@staffsync.com",
+        email="admin@taskforge.com",
         password_hash=get_password_hash("demo123"),
-        name="HR Admin",
+        name="Admin",
         role=UserRole.HR_ADMINISTRATOR,
-        department="Human Resources",
+        department="Management",
         phone="+91-9876543210",
         is_active=True
     )
@@ -165,7 +165,7 @@ def create_employees(db, count=4):
     
     for i, emp_data in enumerate(employee_data):
         full_name = f"{emp_data['first_name']} {emp_data['last_name']}"
-        email = f"{emp_data['first_name'].lower()}.{emp_data['last_name'].lower()}@staffsync.com"
+        email = f"{emp_data['first_name'].lower()}.{emp_data['last_name'].lower()}@taskforge.com"
         
         # Random hire date (6 months to 2 years ago)
         days_ago = random.randint(180, 730)
@@ -452,13 +452,13 @@ def print_summary(db):
     print("🔑 LOGIN CREDENTIALS")
     print("="*60)
     print("\nHR Administrator:")
-    print("  Email: hr@staffsync.com")
+    print("  Email: admin@taskforge.com")
     print("  Password: demo123")
     print("\nEmployees:")
-    print("  1. Rahul Sharma - rahul.sharma@staffsync.com / employee123")
-    print("  2. Priya Patel - priya.patel@staffsync.com / employee123")
-    print("  3. Amit Kumar - amit.kumar@staffsync.com / employee123")
-    print("  4. Sneha Gupta - sneha.gupta@staffsync.com / employee123")
+    print("  1. Rahul Sharma - rahul.sharma@taskforge.com / employee123")
+    print("  2. Priya Patel - priya.patel@taskforge.com / employee123")
+    print("  3. Amit Kumar - amit.kumar@taskforge.com / employee123")
+    print("  4. Sneha Gupta - sneha.gupta@taskforge.com / employee123")
     print("\n" + "="*60 + "\n")
 
 

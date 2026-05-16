@@ -32,9 +32,9 @@ interface Notification {
 
 // Dummy user data
 const currentUser = {
-  name: "HR Admin",
-  email: "hr@staffsync.com",
-  role: "HR Manager",
+  name: "Admin",
+  email: "admin@taskforge.com",
+  role: "Admin",
   avatar: null,
 };
 
