@@ -145,7 +145,7 @@ const SortableTask = ({ task }: { task: Task }) => {
 // ─── Kanban Column ───
 const KanbanColumn = ({ column, tasks }: { column: Column; tasks: Task[] }) => {
   return (
-    <div className="flex flex-col min-w-[260px] w-[260px]">
+    <div className="flex flex-col min-w-[240px] w-[240px] shrink-0">
       {/* Column header */}
       <div className="flex items-center gap-2 mb-3 px-1">
         <div className={cn("w-2 h-2 rounded-full", column.dotColor)} />
@@ -246,7 +246,7 @@ const Tasks = () => {
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2">
+        <div className="flex gap-4 overflow-x-auto pb-4 -mx-2 px-2 min-w-0">
           {columns.map((col) => (
             <KanbanColumn
               key={col.id}

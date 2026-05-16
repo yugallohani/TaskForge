@@ -17,6 +17,7 @@ import {
   WorkSession,
 } from "@/types/project";
 import { useSyncedState } from "@/lib/syncedState";
+import { seedSessions } from "@/data/seedSessions";
 
 const ACCESS_KEY = "taskforge:access:v1";
 const SESSIONS_KEY = "taskforge:sessions:v1";
@@ -106,7 +107,7 @@ export const WorkspaceProvider = ({ children }: { children: ReactNode }) => {
   );
   const [sessions, setSessions] = useSyncedState<WorkSession[]>(
     SESSIONS_KEY,
-    []
+    seedSessions
   );
   const [notifications, setNotifications] = useSyncedState<AppNotification[]>(
     NOTIFICATIONS_KEY,
