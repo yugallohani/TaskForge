@@ -104,22 +104,24 @@ export const Header = ({ title, description }: HeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between px-6 bg-[hsl(220_30%_6%/0.6)] backdrop-blur-2xl">
-      <div>
-        <h1 className="text-lg font-semibold text-foreground">{title}</h1>
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 px-6 bg-[hsl(220_30%_6%/0.6)] backdrop-blur-2xl">
+      {/* Left: Title */}
+      <div className="min-w-0 flex-1">
+        <h1 className="text-lg font-semibold text-foreground truncate">{title}</h1>
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground truncate">{description}</p>
         )}
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* Right: Actions — never shrink, never clip */}
+      <div className="flex items-center gap-3 flex-shrink-0">
         {/* Search */}
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search..."
-            className="h-9 w-64 rounded-lg border border-border bg-muted pl-9 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+            className="h-9 w-48 lg:w-56 rounded-lg border border-border bg-muted pl-9 pr-4 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
           />
         </div>
 

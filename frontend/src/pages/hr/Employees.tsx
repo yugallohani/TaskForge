@@ -39,21 +39,24 @@ const Employees = () => {
     try {
       setIsLoading(true);
       const response = await hrAPI.getEmployees({ page: 1, page_size: 100 });
-      const transformed: TeamMember[] = response.data.items.map((emp: any) => ({
+      const items = response?.data?.items || [];
+      const transformed: TeamMember[] = items.map((emp: any) => ({
         id: emp.employee_id || emp.id,
         name: emp.name,
         email: emp.email,
-        designation: emp.department || "Member",
+        designation: emp.department || emp.position || "Member",
         status: emp.status === "active" ? "active" : "inactive",
         joinedAt: emp.hire_date || emp.created_at,
       }));
       setMembers(transformed);
     } catch (error) {
+      console.error("Failed to fetch team members:", error);
       toast({
-        title: "Error loading team members",
+        title: "Could not load team members",
         description: getErrorMessage(error),
         variant: "destructive",
       });
+      setMembers([]);
     } finally {
       setIsLoading(false);
     }

@@ -11,7 +11,7 @@ export const MainLayout = ({ children, title, description }: MainLayoutProps) =>
   return (
     <>
       <Header title={title} description={description} />
-      <main className="flex-1 p-6">{children}</main>
+      <main className="flex-1 p-6 min-w-0 overflow-x-hidden">{children}</main>
     </>
   );
 };

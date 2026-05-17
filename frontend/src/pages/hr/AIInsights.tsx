@@ -95,6 +95,20 @@ const AIInsightsPage = () => {
       title="AI Insights"
       description="Automated intelligence and team performance analytics."
     >
+      {/* Disclaimer banner */}
+      <div className="mb-6 p-4 rounded-xl border border-[hsl(260_70%_65%/0.15)] bg-[hsl(260_70%_65%/0.05)] backdrop-blur-sm">
+        <div className="flex items-start gap-3">
+          <Brain className="w-5 h-5 text-[hsl(260_70%_65%)] shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm text-foreground font-medium">Sample Insights Preview</p>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+              These insights are currently generated from sample data for demonstration purposes. 
+              Real AI-powered analytics will be integrated as we scale — including automated anomaly detection, 
+              predictive workload balancing, and personalized team recommendations.
+            </p>
+          </div>
+        </div>
+      </div>
       {/* ─── Key Insights ─── */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 mb-8">
         {insights.map((insight) => (

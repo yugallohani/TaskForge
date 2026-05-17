@@ -23,7 +23,7 @@ export const HRLayout = () => {
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <div className="min-h-screen flex w-full relative overflow-hidden">
+      <div className="min-h-screen flex w-full relative overflow-x-hidden overflow-y-auto">
         {/* ─── Immersive dark background ─── */}
         <div
           aria-hidden="true"
@@ -76,7 +76,7 @@ export const HRLayout = () => {
 
         {/* ─── Dashboard UI ─── */}
         <Sidebar />
-        <div className="flex-1 flex flex-col relative z-0">
+        <div className="flex-1 flex flex-col min-w-0 relative z-0">
           <Outlet />
         </div>
       </div>

@@ -8,6 +8,9 @@ import {
   ShieldCheck,
   Upload,
   Clock,
+  LogIn,
+  Play,
+  Square,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProjects } from "@/contexts/ProjectsContext";
@@ -46,6 +49,12 @@ const getIcon = (type: string) => {
       return { icon: FolderPlus, color: "text-[hsl(188_90%_55%)]", bg: "bg-[hsl(188_90%_55%/0.1)]" };
     case "member":
       return { icon: UserPlus, color: "text-primary", bg: "bg-primary/10" };
+    case "login":
+      return { icon: LogIn, color: "text-[hsl(210_80%_60%)]", bg: "bg-[hsl(210_80%_60%/0.1)]" };
+    case "session_start":
+      return { icon: Play, color: "text-[hsl(155_60%_50%)]", bg: "bg-[hsl(155_60%_50%/0.1)]" };
+    case "session_end":
+      return { icon: Square, color: "text-muted-foreground", bg: "bg-muted/50" };
     default:
       return { icon: Clock, color: "text-muted-foreground", bg: "bg-muted" };
   }
@@ -53,20 +62,20 @@ const getIcon = (type: string) => {
 
 export const RecentActivity = () => {
   const { projects } = useProjects();
-  const { accessRequests, notifications } = useWorkspace();
+  const { accessRequests, sessions } = useWorkspace();
 
-  // Build activity feed from real data sources
+  // Build comprehensive activity feed from ALL data sources
   const activities = useMemo<ActivityItem[]>(() => {
     const items: ActivityItem[] = [];
 
-    // From project activity logs
+    // 1. From project activity logs (tasks, submissions, issues, members)
     projects.forEach((p) => {
       p.activity.forEach((a) => {
         let type = "project";
-        if (a.type.includes("submission")) type = "submission";
+        if (a.type.includes("submission") || a.type.includes("upload")) type = "submission";
         else if (a.type.includes("issue")) type = "issue";
-        else if (a.type.includes("member")) type = "member";
-        else if (a.type.includes("approved") || a.type.includes("rejected"))
+        else if (a.type.includes("member") || a.type.includes("join")) type = "member";
+        else if (a.type.includes("approved") || a.type.includes("rejected") || a.type.includes("review"))
           type = "approved";
 
         items.push({
@@ -80,7 +89,7 @@ export const RecentActivity = () => {
       });
     });
 
-    // From access requests
+    // 2. From access requests (requested + approved/rejected)
     accessRequests.forEach((r) => {
       items.push({
         id: `req_${r.id}`,
@@ -100,11 +109,47 @@ export const RecentActivity = () => {
           timestamp: new Date(r.reviewedAt).getTime(),
         });
       }
+      if (r.status === "rejected" && r.reviewedAt) {
+        items.push({
+          id: `rej_${r.id}`,
+          type: "issue",
+          message: `rejected ${r.memberName}'s access to ${r.category === "eval" ? "Evals" : "Generalists"}`,
+          actor: "Admin",
+          time: formatTime(new Date(r.reviewedAt).getTime()),
+          timestamp: new Date(r.reviewedAt).getTime(),
+        });
+      }
     });
 
-    // Sort by timestamp descending, take top 10
-    return items.sort((a, b) => b.timestamp - a.timestamp).slice(0, 10);
-  }, [projects, accessRequests]);
+    // 3. From work sessions (started + completed)
+    sessions.slice(0, 20).forEach((s) => {
+      items.push({
+        id: `sess_start_${s.id}`,
+        type: "session_start",
+        message: s.projectName
+          ? `started working on "${s.projectName}"`
+          : "started a work session",
+        actor: s.memberName,
+        time: formatTime(new Date(s.startedAt).getTime()),
+        timestamp: new Date(s.startedAt).getTime(),
+      });
+      if (s.status === "completed" && s.endedAt) {
+        items.push({
+          id: `sess_end_${s.id}`,
+          type: "session_end",
+          message: s.projectName
+            ? `ended session on "${s.projectName}"`
+            : "ended work session",
+          actor: s.memberName,
+          time: formatTime(new Date(s.endedAt).getTime()),
+          timestamp: new Date(s.endedAt).getTime(),
+        });
+      }
+    });
+
+    // Sort by timestamp descending, take top 12
+    return items.sort((a, b) => b.timestamp - a.timestamp).slice(0, 12);
+  }, [projects, accessRequests, sessions]);
 
   return (
     <div className="dash-glass rounded-2xl p-6 h-full flex flex-col">
@@ -112,7 +157,8 @@ export const RecentActivity = () => {
         <h3 className="text-lg font-semibold text-foreground">
           Recent Activity
         </h3>
-        <span className="text-[10px] text-muted-foreground">
+        <span className="flex items-center gap-1.5 text-[10px] text-primary">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
           Live
         </span>
       </div>

@@ -74,6 +74,7 @@ const AdminDashboard = () => {
       subtitle: `${projects.length} total`,
       icon: FolderKanban,
       trend: { value: projects.length > 0 ? Math.round((activeProjects.length / projects.length) * 100) : 0, isPositive: true },
+      accentColor: "168 76% 42%",
     },
     {
       title: "Total Tasks",
@@ -81,6 +82,7 @@ const AdminDashboard = () => {
       subtitle: `${pendingSubmissions} pending review`,
       icon: CheckSquare,
       trend: { value: completedTasks, isPositive: true },
+      accentColor: "188 90% 55%",
     },
     {
       title: "Productivity Rate",
@@ -88,6 +90,7 @@ const AdminDashboard = () => {
       subtitle: "Completion rate",
       icon: TrendingUp,
       trend: { value: productivityRate > 50 ? 5 : -3, isPositive: productivityRate > 50 },
+      accentColor: "155 60% 50%",
     },
     {
       title: "Open Issues",
@@ -95,6 +98,7 @@ const AdminDashboard = () => {
       subtitle: overdueTasks > 0 ? `${overdueTasks} overdue tasks` : "All on track",
       icon: AlertTriangle,
       trend: { value: openIssues, isPositive: openIssues === 0 },
+      accentColor: "35 90% 55%",
     },
     {
       title: "Team Members",
@@ -102,6 +106,7 @@ const AdminDashboard = () => {
       subtitle: `${activeSessions} online now`,
       icon: Users2,
       trend: { value: activeSessions, isPositive: true },
+      accentColor: "210 80% 60%",
     },
     {
       title: "Eval Accuracy",
@@ -109,6 +114,7 @@ const AdminDashboard = () => {
       subtitle: `${approvedSubmissions}/${totalSubmissions} approved`,
       icon: Brain,
       trend: { value: evalAccuracy > 80 ? 2 : -1, isPositive: evalAccuracy > 80 },
+      accentColor: "260 70% 65%",
     },
   ];
 
